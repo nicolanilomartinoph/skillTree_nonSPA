@@ -13,25 +13,26 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
 Route::get('/', function () {
     return view('welcome');
 });
 
-
-Route::get('/skills', function() {
-    return "skills";
-});
 Route::get('/jobs', function() {
     return view('jobs');
 });
-Route::get('/jobs/{job_name}', 'JobsController@show');
+Route::get('/jobs/{job}', 'JobsController@show');
+
+/*
+Route::get('/skills', function() {
+    return "skills";
+});
+
 
 Route::get('/about', function() {
     return "about";
 });
-
-Route::get('/home', 'HomeController@index')->name('home');
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
+*/

@@ -1,0 +1,12 @@
+.myr {
+    border: solid green 1px;
+}
+
+.myc {
+    border: solid rgb(251, 101, 0) 1px;
+}
+
+.job_icon {
+    width: 100px;
+    height: 100px;
+}
