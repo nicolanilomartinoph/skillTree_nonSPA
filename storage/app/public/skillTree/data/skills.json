@@ -1,0 +1,62 @@
+{
+    "HTML" : {
+        "skill_description" : "put skill description here",
+        "skill_image" : "app/public/skillTree/images/HTML/html_icon.png",
+        "parent_skills" : ["base"],
+        "child_skills" : []
+    },
+    "CSS" : {
+        "skill_description" : "put skill description here",
+        "skill_image" : "app/public/skillTree/images/CSS/css_icon.png",
+        "parent_skills" : ["base"],
+        "child_skills" : [3,4]
+    },
+    "SASS" : {
+        "skill_description" : "put skill description here",
+        "skill_image" : "app/public/skillTree/images/CSS/sass_icon.png",
+        "parent_skills" : [2],
+        "child_skills" : []
+    },
+    "Bootstrap" : {
+        "skill_description" : "put skill description here",
+        "skill_image" : "app/public/skillTree/images/CSS/bootstrap_4_icon.jpeg",
+        "parent_skills" : [2],
+        "child_skills" : []
+    },
+    "Javascript" : {
+        "skill_description" : "put skill description here",
+        "skill_image" : "app/public/skillTree/images/JS/javascript_icon.jpg",
+        "parent_skills" : ["base"],
+        "child_skills" : [6,7,8]
+    },
+    "ReactJS" : {
+        "skill_description" : "put skill description here",
+        "skill_image" : "app/public/skillTree/images/JS/reactjs_icon.png",
+        "parent_skills" : [5],
+        "child_skills" : [10]
+    },
+    "VueJS" : {
+        "skill_description" : "put skill description here",
+        "skill_image" : "app/public/skillTree/images/JS/vuejs_icon.png",
+        "parent_skills" : [5],
+        "child_skills" : [9]
+    },
+    "Angular" : {
+        "skill_description" : "put skill description here",
+        "skill_image" : "app/public/skillTree/images/JS/angular_icon.png",
+        "parent_skills" : [5],
+        "child_skills" : []
+    },
+    "Vuex" : {
+        "skill_description" : "put skill description here",
+        "skill_image" : "app/public/skillTree/images/JS/vuex_icon.png",
+        "parent_skills" : [7],
+        "child_skills" : []
+    },
+    "Redux" : {
+        "skill_description" : "put skill description here",
+        "skill_image" : "app/public/skillTree/images/JS/redux_icon.png",
+        "parent_skills" : [6],
+        "child_skills" : []
+    }
+}

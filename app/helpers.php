@@ -18,7 +18,7 @@ function skill_unpacker($skill, $recursive = true)
     {
         // Find the skill and place it in this TEMP variable
         $raw_skill = \App\Skill::find($id);
-
+        
         // Fix skill image (to prepare it for json_encode)
         $raw_skill['skill_image'] = 'data:image/png;base64,'.base64_encode($raw_skill['skill_image']);
 
@@ -29,6 +29,7 @@ function skill_unpacker($skill, $recursive = true)
         $raw_skill->parent_skills = json_decode($raw_skill->parent_skills);
         $raw_skill->child_skills = json_decode($raw_skill->child_skills);
         $raw_skill = $raw_skill->toArray();
+
         
         // then unpack skill if there is a child skill
         if($raw_skill['child_skills'] && $recursive)
