@@ -52,7 +52,7 @@ class JobsController extends Controller
     public function show(job $job)
     {
         $job['base_skills'] = json_decode($job['base_skills']);
-        $job['base_skills'] = skill_unpacker($job['base_skills'], true);
+        $job['base_skills'] = skill_unpacker($job['base_skills']);
         
         return view('jobDetail', [
             'job_details' => $job,

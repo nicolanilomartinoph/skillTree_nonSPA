@@ -1,7 +1,6 @@
 <template>
     <div>
         <img class="skill_image" :src="skill.skill_image"/>
-        <div class="bg-warning">TEST</div>
     </div>
 </template>
 

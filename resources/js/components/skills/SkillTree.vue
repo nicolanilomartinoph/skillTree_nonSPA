@@ -20,28 +20,60 @@ import skillLevel from './SkillLevel.vue'
 
 export default {
     props: ['skills_details'],
+    data() {
+        return {
+            tree_data: {
+                skills: this.skills_details,
+                depth: 0,
+                level_data: []
+            }
+        }
+    },
+    methods: {
+        get_level_data: function(skills = this.tree_data.skills) 
+        {
+            this.tree_data.depth++;
+            let level_data = {
+                branch_count : skills.length,
+                branch_leaf_width : "test"
+            }
+            this.tree_data.level_data.push(level_data); // is the width of the level but each node may vary in width
+
+            this.get_base_skill_data();
+        },
+        get_base_skill_data: function(skills = this.tree_data.skills) 
+        {
+            skills.forEach(element => {
+                if(element.parent_skills == "base")
+                {
+                    element.node_depth = 0;
+                    //element.node_max_width = 0;
+                    this.scan_depth(element, element.child_skills);
+                }
+            });    
+        },
+        scan_depth: function(base_skill, child_skills = null)
+        {
+            if(child_skills) 
+            {
+                base_skill.node_depth++;
+                // base_skill.node_max_width = base_skill.node_max_width > base_skill.child_skills.length ? base_skill.node_max_width : base_skill.child_skills.length;
+
+                child_skills.forEach(element => {
+                    this.scan_depth(base_skill, element.child_skills);
+                })
+            }
+        }
+    }, 
+    mounted: function()
+    {
+        this.get_level_data();
+    },
     components: {
         'skill-level': skillLevel,
     }
 }
-/*
 
-If [skill_details] > 0, create a <skill-level>
-pass the [skill_details] to <skill-level>
-
-
-tree structure
-- skill-level can be recursed inside skill-cont provided that parent skill-level width can be adjusted depending on the lower skill-level's # of skill-cont
-solution: 
-1. each level down will adjust the parent's width, $emit an event upon mounting of the lower skill-level to trigger widening
-2. get the depth of the children and then apply early 
-- skill-level cannot be recursed inside skill-cont
-
-
-THINGS TO STUDY:
-- CSS VARIABLES
--  attr() CSS function together with a data-* attribute:
- */
 </script>
 
 <style scoped>
