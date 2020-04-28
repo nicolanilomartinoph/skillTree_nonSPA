@@ -24,67 +24,93 @@ export default {
         return {
             tree_data: {
                 limbs: this.skills_details, // Limbs refer to the base skills
-                gens_data: [],
             },
         }    
     },
     // Here we will use the concept of a family tree for the variables
     methods: {
-        get_tree_generations_data2: function(skills, parent = null, ancestor = null)
+        get_limb_generations_data: function(skills, parent = null, ancestor = null)
         {
-            const isLimb = false
             // BASE OR NOT ???
             skills.forEach(skill => {
-                // IF BASE
                 if(skill.parent_skills[0] === "base") {
                     skill.limb_data = [],
                     skill.gen_nth = 1;
-                    console.log("BASE")
-                    isLimb = true
-                }
-                // IF NOT BASE
-                else{
+                    //console.log("Setting base_data of " + skill.skill_name)
+                }else{
+                    //console.log("ATTACHING branch_data to " + skill.skill_name)
                     skill.branch_data = {
                         gen_nth: parent.gen_nth + 1,
-                        width: parent.child_skills.length
+                        siblings: [skill.skill_name]
                     }
+                    skill.gen_nth = parent.gen_nth + 1;
 
-                    // Send data to ancestor
-                    ancestor.limb_data.push(skill.branch_data)
+                    let our_gens_data_object = null
+
+                    //console.log("let's check our ancestor's limb_data for our generations data ")
+                    for(let i = 0; i < ancestor.limb_data.length; i++){
+                        if(ancestor.limb_data[i].gen_nth === skill.branch_data.gen_nth){
+                            our_gens_data_object = ancestor.limb_data[i]
+                            //console.log("FOUND OUR DATA")
+                            break;
+                        }else{
+                            //console.log("DID NOT FIND IT")
+                        }
+                    }
+                    if(!our_gens_data_object) {
+                        //console.log("I didn't find our data so I'm pushing my data as our gens data")
+                        ancestor.limb_data.push(skill.branch_data)
+                    }else{
+                        //console.log("I found our data, adding my name to it")
+                        our_gens_data_object.siblings.push(skill.skill_name)
+                    }
                 }
             })
 
             // Recurse
             skills.forEach(skill => {
+                //console.log("CHECK IF RECURSION IS NEEDED FOR " + skill.skill_name + "'s child")
                 if(skill.gen_nth === 1){
-                    if(skill.child_skills) {
+                    if(skill.child_skills.length) {
                         skill.child_skills.forEach(element => {
-                            this.get_tree_generations_data2(new Array(element), skill, skill)
+                            //console.log(element.skill_name + " OF " + skill.skill_name)
+                            this.get_limb_generations_data(new Array(element), skill, skill)
                         })
-                    }
+                    }//else console.log(skill.skill_name + " has no child")
                 }else{
-                    if(skill.child_skills) {
+                    if(skill.child_skills.length) {
+                        //console.log("There is child of " + skill.skill_name)
                         skill.child_skills.forEach(element => {
-                            this.get_tree_generations_data2(new Array(element), skill, ancestor)
+                            //console.log("recursing " + element.skill_name + " OF " + skill.skill_name)
+                            this.get_limb_generations_data(new Array(element), skill, ancestor)
                         })
-                    }
+                    }//else console.log(skill.skill_name + " has no child")
                 }
             })
-
-            /**
-             * CORRECT THE limb_data
-             * accumulate how many obj have the same gen_nth = max level width
-             * reduce it, push to limb_data
-             * 
-             * depth = limb_data.length
-             */
-            if(isLimb){
-                skills.forEach(skill => {
-                    skill.limb_data.forEach
-                })
-            }
         },
-        get_tree_generations_data: function(skills, parent = null) 
+        get_tree_generations_data: function(limbs) {
+            //this.tree_data.gens_data.push()
+
+            // Find the dept
+            limbs.forEach(limb => {
+                limb.depth = limb.limb_data.length + 1
+            })
+
+            //  limb.widest = { "gen": 0 , "width": 0 }
+            limbs.forEach(limb => {
+                limb.widest = { "gen": 1 , "width": 1 }
+
+                limb.limb_data.forEach(limb_datum => {
+                    if(limb.widest.gen < limb_datum.siblings.length){
+                        limb.widest = { 
+                            "gen": limb_datum.gen_nth,
+                            "width": limb_datum.siblings.length 
+                        }
+                    }
+                })
+            })
+        },
+        get_tree_generations_data2: function(skills, parent = null) 
         {
             // Current Gen getter
             function apply_current_gen_nth() {
@@ -141,7 +167,8 @@ export default {
     }, 
     mounted: function()
     {
-        this.get_tree_generations_data2(this.tree_data.limbs);
+        this.get_limb_generations_data(this.tree_data.limbs);
+        this.get_tree_generations_data(this.tree_data.limbs);
     },
     components: {
         'skill-level': skillLevel,

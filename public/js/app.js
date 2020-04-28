@@ -1961,8 +1961,6 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _SkillLevel_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SkillLevel.vue */ "./resources/js/components/skills/SkillLevel.vue");
-function _readOnlyError(name) { throw new Error("\"" + name + "\" is read-only"); }
-
 //
 //
 //
@@ -1986,68 +1984,95 @@ function _readOnlyError(name) { throw new Error("\"" + name + "\" is read-only")
   data: function data() {
     return {
       tree_data: {
-        limbs: this.skills_details,
-        // Limbs refer to the base skills
-        gens_data: []
+        limbs: this.skills_details // Limbs refer to the base skills
+
       }
     };
   },
   // Here we will use the concept of a family tree for the variables
   methods: {
-    get_tree_generations_data2: function get_tree_generations_data2(skills) {
+    get_limb_generations_data: function get_limb_generations_data(skills) {
       var _this = this;
 
       var parent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
       var ancestor = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-      var isLimb = false; // BASE OR NOT ???
-
+      // BASE OR NOT ???
       skills.forEach(function (skill) {
-        // IF BASE
         if (skill.parent_skills[0] === "base") {
-          skill.limb_data = [], skill.gen_nth = 1;
-          console.log("BASE");
-          isLimb = (_readOnlyError("isLimb"), true);
-        } // IF NOT BASE
-        else {
-            skill.branch_data = {
-              gen_nth: parent.gen_nth + 1,
-              width: parent.child_skills.length
-            }; // Send data to ancestor
+          skill.limb_data = [], skill.gen_nth = 1; //console.log("Setting base_data of " + skill.skill_name)
+        } else {
+          //console.log("ATTACHING branch_data to " + skill.skill_name)
+          skill.branch_data = {
+            gen_nth: parent.gen_nth + 1,
+            siblings: [skill.skill_name]
+          };
+          skill.gen_nth = parent.gen_nth + 1;
+          var our_gens_data_object = null; //console.log("let's check our ancestor's limb_data for our generations data ")
 
-            ancestor.limb_data.push(skill.branch_data);
+          for (var i = 0; i < ancestor.limb_data.length; i++) {
+            if (ancestor.limb_data[i].gen_nth === skill.branch_data.gen_nth) {
+              our_gens_data_object = ancestor.limb_data[i]; //console.log("FOUND OUR DATA")
+
+              break;
+            } else {//console.log("DID NOT FIND IT")
+            }
           }
+
+          if (!our_gens_data_object) {
+            //console.log("I didn't find our data so I'm pushing my data as our gens data")
+            ancestor.limb_data.push(skill.branch_data);
+          } else {
+            //console.log("I found our data, adding my name to it")
+            our_gens_data_object.siblings.push(skill.skill_name);
+          }
+        }
       }); // Recurse
 
       skills.forEach(function (skill) {
+        //console.log("CHECK IF RECURSION IS NEEDED FOR " + skill.skill_name + "'s child")
         if (skill.gen_nth === 1) {
-          if (skill.child_skills) {
+          if (skill.child_skills.length) {
             skill.child_skills.forEach(function (element) {
-              _this.get_tree_generations_data2(new Array(element), skill, skill);
+              //console.log(element.skill_name + " OF " + skill.skill_name)
+              _this.get_limb_generations_data(new Array(element), skill, skill);
             });
-          }
+          } //else console.log(skill.skill_name + " has no child")
+
         } else {
-          if (skill.child_skills) {
+          if (skill.child_skills.length) {
+            //console.log("There is child of " + skill.skill_name)
             skill.child_skills.forEach(function (element) {
-              _this.get_tree_generations_data2(new Array(element), skill, ancestor);
+              //console.log("recursing " + element.skill_name + " OF " + skill.skill_name)
+              _this.get_limb_generations_data(new Array(element), skill, ancestor);
             });
-          }
+          } //else console.log(skill.skill_name + " has no child")
+
         }
       });
-      /**
-       * CORRECT THE limb_data
-       * accumulate how many obj have the same gen_nth = max level width
-       * reduce it, push to limb_data
-       * 
-       * depth = limb_data.length
-       */
-
-      if (isLimb) {
-        skills.forEach(function (skill) {
-          skill.limb_data.forEach;
-        });
-      }
     },
-    get_tree_generations_data: function get_tree_generations_data(skills) {
+    get_tree_generations_data: function get_tree_generations_data(limbs) {
+      //this.tree_data.gens_data.push()
+      // Find the dept
+      limbs.forEach(function (limb) {
+        limb.depth = limb.limb_data.length + 1;
+      }); //  limb.widest = { "gen": 0 , "width": 0 }
+
+      limbs.forEach(function (limb) {
+        limb.widest = {
+          "gen": 1,
+          "width": 1
+        };
+        limb.limb_data.forEach(function (limb_datum) {
+          if (limb.widest.gen < limb_datum.siblings.length) {
+            limb.widest = {
+              "gen": limb_datum.gen_nth,
+              "width": limb_datum.siblings.length
+            };
+          }
+        });
+      });
+    },
+    get_tree_generations_data2: function get_tree_generations_data2(skills) {
       var _this2 = this;
 
       var parent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
@@ -2106,7 +2131,8 @@ function _readOnlyError(name) { throw new Error("\"" + name + "\" is read-only")
     }
   },
   mounted: function mounted() {
-    this.get_tree_generations_data2(this.tree_data.limbs);
+    this.get_limb_generations_data(this.tree_data.limbs);
+    this.get_tree_generations_data(this.tree_data.limbs);
   },
   components: {
     'skill-level': _SkillLevel_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
