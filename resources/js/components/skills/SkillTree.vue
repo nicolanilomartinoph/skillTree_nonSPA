@@ -7,13 +7,20 @@
             <div class="col-6 bg-primary">Base Skills</div>
             <div class="col-6 bg-secondary">Auxiliary Skills</div>
         </div>
-        <div class="row">
-            <div class="skills_box bg-success">
-                <skill-level :skills="skills_details" />
+        <div class="myc">
+            <div class="skills_box ">
+                <skill-level :skills="tree_data.limbs" />
             </div>
         </div>
     </div>
 </template>
+
+<style scoped>
+.container {
+    border: 1px dashed gray;
+    display: flex;
+} 
+</style>
 
 <script>
 import skillLevel from './SkillLevel.vue'
@@ -165,7 +172,7 @@ export default {
             })
         }, 
     }, 
-    mounted: function()
+    created: function()
     {
         this.get_limb_generations_data(this.tree_data.limbs);
         this.get_tree_generations_data(this.tree_data.limbs);
@@ -177,9 +184,3 @@ export default {
 
 </script>
 
-<style scoped>
-.skills_box {
-    width: 1500px;
-    height: 1000px;
-}
-</style>

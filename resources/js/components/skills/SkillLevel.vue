@@ -1,6 +1,11 @@
 <template>
-    <div class="skill_level">
-        <skill-cont v-for="value of skills" :key="value.id"  :skill="value" />
+    <div class="skillLevel">
+        <skill-cont 
+            v-for="skill in skills" 
+            :key="skill.id" 
+            :skill="skill" 
+            :max_width="fractions" 
+        />
     </div>
 </template>
 
@@ -9,16 +14,34 @@ import skillCont from "./SkillCont.vue"
 
 export default {
     props: ['skills'],
+    computed: {
+        fractions: function() {
+            let x = []
+
+            for(let i = 0; i < this.skills.length;i++){
+                x.push(this.skills[i].widest.width)
+            }
+
+            return x.reduce((acc,cur) => {
+                return acc + cur
+            })
+            
+        }
+    },
     components: {
         'skill-cont': skillCont,
-    } 
+    },
+    mounted() {
+        console.log("SKILL LEVEL")
+    }
 }
 // skill level create skill-cont foreach object which displays the image
 </script>
 
 <style scoped>
-.skill_level {
-    display: grid;
-    grid-template-columns: auto auto auto;
+.skillLevel {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
 }
 </style>
