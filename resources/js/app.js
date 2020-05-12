@@ -20,6 +20,9 @@ window.Vue = require('vue');
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('skill-tree', require('./components/skills/SkillTree.vue').default);
+Vue.component('skill-level', require('./components/skills/SkillLevel.vue').default);
+Vue.component('skill-cont', require('./components/skills/SkillCont.vue').default);
+Vue.component('skill-path', require('./components/skills/SkillPath.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

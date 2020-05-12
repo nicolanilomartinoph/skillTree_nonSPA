@@ -58,5 +58,29 @@
         "skill_image" : "app/public/skillTree/images/JS/redux_icon.png",
         "parent_skills" : [6],
         "child_skills" : []
+    },
+    "PHP" : {
+        "skill_description" : "put skill description here",
+        "skill_image" : "app/public/skillTree/images/PHP/php_logo.png",
+        "parent_skills" : ["base"],
+        "child_skills" : [12,13,14]
+    },
+    "Code Igniter" : {
+        "skill_description" : "put skill description here",
+        "skill_image" : "app/public/skillTree/images/PHP/codeIgniter_icon.jpg",
+        "parent_skills" : [11],
+        "child_skills" : []
+    },
+    "Laravel" : {
+        "skill_description" : "put skill description here",
+        "skill_image" : "app/public/skillTree/images/PHP/laravel_icon.png",
+        "parent_skills" : [11],
+        "child_skills" : []
+    },
+    "Symphony" : {
+        "skill_description" : "put skill description here",
+        "skill_image" : "app/public/skillTree/images/PHP/symfony_icon.png",
+        "parent_skills" : [11],
+        "child_skills" : []
     }
 }

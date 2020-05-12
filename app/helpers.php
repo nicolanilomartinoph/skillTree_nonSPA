@@ -1,6 +1,6 @@
 <?php
 
-function skill_unpacker($skill, $recursive = true, $parent_skills = null) 
+function skill_unpacker($skill, $recursive = true, &$parent_skills = null) 
 {  
     /**
      * DESCRIPTION: This function accepts an array of skill ID [1,2,3,4] and turns the child skill index into associative arrays containing the details, if 
@@ -37,8 +37,10 @@ function skill_unpacker($skill, $recursive = true, $parent_skills = null)
         if($raw_skill['child_skills'] && $recursive)
         {
             // Then sign the returned value to the child skills array
-            $raw_skill['child_skills'] = skill_unpacker($raw_skill['child_skills']);
+            $raw_skill['child_skills'] = skill_unpacker($raw_skill['child_skills'], true);
         }
+
+        
 
         // Assign the skill back to the index
         $skill[$key] = $raw_skill;

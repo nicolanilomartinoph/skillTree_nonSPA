@@ -4,22 +4,42 @@
             <h1 class="col-12 myr">Skill Tree</h1>
         </div>
         <div class="row">
-            <div class="col-6 bg-primary">Base Skills</div>
-            <div class="col-6 bg-secondary">Auxiliary Skills</div>
+            <div class="col-6 bg-primary mb-2">Base Skills</div>
+            <div class="col-6 bg-secondary mb-2">Auxiliary Skills</div>
         </div>
-        <div class="myc">
-            <div class="skills_box ">
-                <skill-level :skills="tree_data.limbs" />
+        <div class="skills_box">
+            <div class="pairContainer">
+                <div class="skillpathPair" v-for="(gens, index) in gensPerLevel" :key="index">
+                    <!-- Render horizontal level -->
+                    <skill-level :skills="gens" />
+                    <skill-path :parent="gens" :child="gensPerLevel[index + 1]"/>
+                    <!-- Render horizontal level -->
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <style scoped>
-.container {
-    border: 1px dashed gray;
+.skills_box {
     display: flex;
-} 
+    flex-wrap: nowrap;
+    flex-direction: column;
+    overflow: auto;
+    border: 2px solid orangered;
+    min-width: auto;
+    max-width: auto;
+}
+
+.skillpathPair {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.pairContainer {
+    width: max-content;
+}
 </style>
 
 <script>
@@ -27,11 +47,14 @@ import skillLevel from './SkillLevel.vue'
 
 export default {
     props: ['skills_details'],
-    data: function () {
+    data() {
         return {
-            tree_data: {
-                limbs: this.skills_details, // Limbs refer to the base skills
+            gensPerLevel: [],
+            /*
+            tree_data: { // This data sorts skills per parent
+                limbs: this.skills_details,
             },
+            */
         }    
     },
     // Here we will use the concept of a family tree for the variables
@@ -96,17 +119,13 @@ export default {
             })
         },
         get_tree_generations_data: function(limbs) {
-            //this.tree_data.gens_data.push()
-
-            // Find the dept
+            // Find the depth
             limbs.forEach(limb => {
                 limb.depth = limb.limb_data.length + 1
             })
 
-            //  limb.widest = { "gen": 0 , "width": 0 }
             limbs.forEach(limb => {
                 limb.widest = { "gen": 1 , "width": 1 }
-
                 limb.limb_data.forEach(limb_datum => {
                     if(limb.widest.gen < limb_datum.siblings.length){
                         limb.widest = { 
@@ -117,70 +136,44 @@ export default {
                 })
             })
         },
-        get_tree_generations_data2: function(skills, parent = null) 
-        {
-            // Current Gen getter
-            function apply_current_gen_nth() {
-                if(parent === null) {
-                    return 1
-                }else{
-                    return parent.gen_nth + 1
-                }
-            }
-
-            // Tag each skill with .gen_nth in current generation
-            skills.forEach(skill => {
-                if(!skill.hasOwnProperty("gen_nth")) {
-                    skill.gen_nth = apply_current_gen_nth()
-                }
-            })
+        skills: function() {
+            const x = _.cloneDeep(this.skills_details)
+            tagSkillGensInfo(x, null, this.gensPerLevel, this.gens)
             
-            function get_our_gens_data_object (skill, gens_data)  {
-                if(!gens_data.length){
-                    return null
-                }else{
-                    for(let i = 0; i < gens_data.length; i++) {
-                        if(gens_data[i].gens_nth === skill.gen_nth) {
-                            return gens_data[i]
-                        }
-                    }
-                    return null
-                }
-            }
+            /**
+             * This fn sorts skills in per level manner
+             * - watch out for self-calling functions
+             */
+            function tagSkillGensInfo(skills = x, parent = null, levels, gens) {
+                for(let i = 0; i < skills.length; i++){
+                    // Tagging a gen_nth to skills
+                    skills[i].gen_nth = skills[i].parent_skills[0] === "base" ? 1 : (function() {
+                        skills[i].parent_skills = parent
+                        return parent.gen_nth + 1
+                    })()
+                    
+                    // Add yourself to your own level gen
+                    levels[skills[i].gen_nth - 1] ? levels[skills[i].gen_nth - 1].push(skills[i]) : levels.push(Array.of(skills[i]))  
 
-            // Let's send a collective data of our current gen
-            skills.forEach(skill => {
-                const our_gens_data_object = get_our_gens_data_object(skill, this.tree_data.gens_data)
+                    // Tagging the skill's with its siblings by obj reference (CAUTION: still refers to self as sibling)
+                    skills[i].siblings = parent? parent.child_skills : skills
+                    
+                    // Determine "flex : Number" for css width of each skill
+                    skills[i].flex = skills[i].child_skills.length <= 1 ? 1 : skills[i].child_skills.length + 1
 
-                if(our_gens_data_object === null) {
-                    this.tree_data.gens_data.push({
-                        gens_nth: apply_current_gen_nth(),
-                        gens_siblings: [skill.skill_name]
-                    });
-                }else{
-                    our_gens_data_object.gens_siblings.push(skill.skill_name)
+                    // Time to recurse
+                    tagSkillGensInfo(skills[i].child_skills, skills[i], levels, gens)
                 }
-            })
-            
-            // Recurse for each child of the current generation
-            skills.forEach(skill => {
-                if(skill.child_skills.length > 0) {
-                    skill.child_skills.forEach(element => {
-                        this.get_tree_generations_data(new Array(element), skill)
-                    })
-                }
-            })
-        }, 
+            }   
+        }
     }, 
     created: function()
     {
-        this.get_limb_generations_data(this.tree_data.limbs);
-        this.get_tree_generations_data(this.tree_data.limbs);
+        this.skills()
     },
     components: {
         'skill-level': skillLevel,
     }
 }
-
 </script>
 

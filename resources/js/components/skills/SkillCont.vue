@@ -1,8 +1,6 @@
 <template>
-    <div v-bind:style="{ display: flex, flexDirection: column, flex: skill.widest.width}">
-        <div>
-            I'm a skill Cont
-        </div>
+    <div class="skillCont" :style="this.style">
+        <img class="skill_image" :src="skill.skill_image" />
     </div>
 </template>
 
@@ -10,25 +8,28 @@
 import skillLevel from './SkillLevel.vue'
 
 export default {
-    props: ['skill','max_width'],
+    props: ['skill'],
     computed: {
-        STYLE: function() {
-            return {
-                display: flex,
-                flexDirection: column,
-                flex: this.skill.widest.width
+        style: function() {
+            let styleObject = {
+                display: 'flex',
+                flexDirection: "column",
+                flex: `${this.skill.flex}`,
+                border: "1px dashed violet",
+                alignItems: "center",
+                minHeight: "max-content",
+                minWidth: "150px",
             }
-        },
-        base_width: function() {
-            return this.skill.widest.width * 100/this.max_width;
+            return styleObject
         }
-    },
-    components: {
-        'skill-level': skillLevel,
     }
 }
 </script>
 
 <style scoped>
-
+.skill_image {
+    height: 100px;
+    width:  100px;
+    object-fit: contain;
+}
 </style>

@@ -1,47 +1,33 @@
 <template>
     <div class="skillLevel">
+        <!-- Render individual skills -->
         <skill-cont 
             v-for="skill in skills" 
             :key="skill.id" 
             :skill="skill" 
-            :max_width="fractions" 
         />
+        <!-- Render individual skills -->
     </div>
 </template>
+
+<style scoped>
+.skillLevel {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    width: inherit;
+    border: 1px solid greenyellow;
+}
+</style>
 
 <script>
 import skillCont from "./SkillCont.vue"
 
 export default {
-    props: ['skills'],
-    computed: {
-        fractions: function() {
-            let x = []
-
-            for(let i = 0; i < this.skills.length;i++){
-                x.push(this.skills[i].widest.width)
-            }
-
-            return x.reduce((acc,cur) => {
-                return acc + cur
-            })
-            
-        }
-    },
-    components: {
-        'skill-cont': skillCont,
-    },
-    mounted() {
-        console.log("SKILL LEVEL")
-    }
+    props: ['skills'],  
 }
-// skill level create skill-cont foreach object which displays the image
+
+/**
+ * WE WILL LIMIT OUR LEVEL INQUIRY TO THE BASE SKILL ONLY
+ */
 </script>
-
-<style scoped>
-.skillLevel {
-    display: flex;
-    flex-direction: row;
-    flex: 1;
-}
-</style>
