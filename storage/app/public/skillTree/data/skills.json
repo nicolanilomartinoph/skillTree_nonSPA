@@ -68,19 +68,67 @@
     "Code Igniter" : {
         "skill_description" : "put skill description here",
         "skill_image" : "app/public/skillTree/images/PHP/codeIgniter_icon.jpg",
-        "parent_skills" : [11],
+        "parent_skills" : [],
         "child_skills" : []
     },
     "Laravel" : {
         "skill_description" : "put skill description here",
         "skill_image" : "app/public/skillTree/images/PHP/laravel_icon.png",
-        "parent_skills" : [11],
+        "parent_skills" : [],
         "child_skills" : []
     },
     "Symphony" : {
         "skill_description" : "put skill description here",
         "skill_image" : "app/public/skillTree/images/PHP/symfony_icon.png",
-        "parent_skills" : [11],
+        "parent_skills" : [],
+        "child_skills" : []
+    },
+    "Bit Bucket" : {
+        "skill_description" : "put skill description here",
+        "skill_image" : "app/public/skillTree/images/auxiliary_skills/bitbucket_icon.png",
+        "parent_skills" : [18],
+        "child_skills" : []
+    },
+    "Circle Ci" : {
+        "skill_description" : "put skill description here",
+        "skill_image" : "app/public/skillTree/images/auxiliary_skills/circle_ci_icon.png",
+        "parent_skills" : ["base"],
+        "child_skills" : []
+    },
+    "Docker" : {
+        "skill_description" : "put skill description here",
+        "skill_image" : "app/public/skillTree/images/auxiliary_skills/docker_icon.png",
+        "parent_skills" : ["base"],
+        "child_skills" : []
+    },
+    "Git" : {
+        "skill_description" : "put skill description here",
+        "skill_image" : "app/public/skillTree/images/auxiliary_skills/git_icon.png",
+        "parent_skills" : ["base"],
+        "child_skills" : [15,19,20,21]
+    },
+    "Github" : {
+        "skill_description" : "put skill description here",
+        "skill_image" : "app/public/skillTree/images/auxiliary_skills/github_icon.png",
+        "parent_skills" : [18],
+        "child_skills" : []
+    },
+    "Git Kraken" : {
+        "skill_description" : "put skill description here",
+        "skill_image" : "app/public/skillTree/images/auxiliary_skills/gitkraken_icon.png",
+        "parent_skills" : [18],
+        "child_skills" : []
+    },
+    "Git Lab" : {
+        "skill_description" : "put skill description here",
+        "skill_image" : "app/public/skillTree/images/auxiliary_skills/gitlab_icon.png",
+        "parent_skills" : [18],
+        "child_skills" : []
+    },
+    "loopback" : {
+        "skill_description" : "put skill description here",
+        "skill_image" : "app/public/skillTree/images/auxiliary_skills/loopback_icon.png",
+        "parent_skills" : ["base"],
         "child_skills" : []
     }
 }

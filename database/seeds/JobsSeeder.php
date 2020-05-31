@@ -21,6 +21,7 @@ class JobsSeeder extends Seeder
                 'job_description' => $job->job_description,
                 'base_skills' => json_encode($job->base_skills),
                 'job_image' => file_get_contents(storage_path($job->job_image)),
+                'aux' => json_encode($job->aux)
             ]);
         }  
     }

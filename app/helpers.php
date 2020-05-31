@@ -24,8 +24,8 @@ function skill_unpacker($skill, $recursive = true, &$parent_skills = null)
         // Fix skill image (to prepare it for json_encode)
         $raw_skill['skill_image'] = 'data:image/png;base64,'.base64_encode($raw_skill['skill_image']);
 
-        // Append subject count
-        $raw_skill['subjects_count'] = $raw_skill->subjects()->count();
+        // Append Skill's subjects
+        $raw_skill['subjects'] = $raw_skill->subjects;
 
         // Unpack JSONs to regular PHP arrays so it's readable by PHP as array(array contents will be unpacked)
         $raw_skill->parent_skills = json_decode($raw_skill->parent_skills);
@@ -39,8 +39,6 @@ function skill_unpacker($skill, $recursive = true, &$parent_skills = null)
             // Then sign the returned value to the child skills array
             $raw_skill['child_skills'] = skill_unpacker($raw_skill['child_skills'], true);
         }
-
-        
 
         // Assign the skill back to the index
         $skill[$key] = $raw_skill;

@@ -1908,28 +1908,242 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _SkillLevel_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SkillLevel.vue */ "./resources/js/components/skills/SkillLevel.vue");
 //
 //
 //
 //
 //
 //
-
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['skill'],
+  props: ['skill', 'siblings'],
+  data: function data() {
+    return {
+      showSkillDetails: false,
+      click: false,
+      hover: false
+    };
+  },
   computed: {
-    style: function style() {
-      var styleObject = {
-        display: 'flex',
-        flexDirection: "column",
-        flex: "".concat(this.skill.flex),
-        border: "1px dashed violet",
-        alignItems: "center",
-        minHeight: "max-content",
-        minWidth: "150px"
-      };
-      return styleObject;
+    branch: function branch() {
+      if (this.skill.child_skills.length > 0) {
+        var fractions = 100 / this.skill.child_skills.length;
+        var offsetFraction = fractions / 2;
+        var branchStart = offsetFraction;
+        var branchEnd = branchStart + fractions * (this.skill.child_skills.length - 1);
+        var x = [branchStart, branchEnd];
+        return x;
+      } else {
+        return [0, 0];
+      }
+    }
+  },
+  methods: {
+    SkillDetailsModalUp: function SkillDetailsModalUp() {
+      this.showSkillDetails = true;
+      console.log("UP");
+    },
+    SkillDetailsModalDown: function SkillDetailsModalDown() {
+      this.showSkillDetails = false;
+      console.log("DOWN");
+    },
+    showTopicTree: function showTopicTree() {
+      this.click = true;
+    },
+    hoverToggle: function hoverToggle(x) {
+      this.hover = !this.hover;
     }
   }
 });
@@ -1966,15 +2180,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['skills']
 });
-/**
- * WE WILL LIMIT OUR LEVEL INQUIRY TO THE BASE SKILL ONLY
- */
 
 /***/ }),
 
@@ -1996,121 +2205,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  /**
-   * We are going to mutate(add some properties for skillPath's use) the props 
-   * as this skillPathing is not the skillTree's business
-   */
-  props: ['parent', 'child'],
-  data: function data() {
-    return {
-      parentGens: this.parent,
-      childGens: this.child,
-      markers: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
-    };
-  },
-  computed: {
-    parentTotalFlex: function parentTotalFlex() {
-      var parentTotalFlex = 0;
-
-      for (var i = 0; i < this.parentGens.length; i++) {
-        parentTotalFlex += this.parentGens[i].flex;
-      }
-
-      return parentTotalFlex;
-    },
-    pathableParent: function pathableParent() {
-      var pathableParent = [];
-
-      for (var i = 0; i < this.parentGens.length; i++) {
-        this.parentGens[i].child_skills.length > 0 ? pathableParent.push(this.parentGens[i]) : null;
-      }
-
-      return pathableParent;
-    },
-    parentFraction: function parentFraction() {
-      return 100 / this.parentTotalFlex;
-    },
-    parentPath: function parentPath() {
-      // Preparing variables
-      var parentTotalFlex = 0;
-      var pathableParent = [];
-
-      for (var i = 0; i < this.parentGens.length; i++) {
-        parentTotalFlex += this.parentGens[i].flex;
-        this.parentGens[i].child_skills.length > 0 ? pathableParent.push(this.parentGens[i]) : null;
-      }
-
-      var parentFraction = 100 / parentTotalFlex; // Doing the calc for each parent (including the unpathableParent(parent with no child))
-
-      for (var _i = 0, covered = 0; _i < this.parentGens.length; _i++) {
-        //if(this.parentGens[i].child_skills.length){
-        this.parentGens[_i].downline = covered + 0.50 * (parentFraction * this.parentGens[_i].flex); //}
-
-        covered += parentFraction * this.parentGens[_i].flex;
-      }
-
-      return pathableParent;
-    },
-    xparentPath: function xparentPath() {
-      // Preparing variables
-      var parentTotalFlex = 0;
-
-      for (var i = 0; i < this.parentGens.length; i++) {
-        parentTotalFlex += this.parentGens[i].flex; //this.parentGens[i].child_skills.length > 0 ? pathableParent.push(this.parentGens[i]) : null
-      }
-
-      var parentFraction = 100 / parentTotalFlex; // Doing the calc for each parent (including the unpathableParent(parent with no child))
-
-      for (var _i2 = 0, covered = 0; _i2 < this.parentGens.length; _i2++) {
-        //if(this.parentGens[i].child_skills.length){
-        this.parentGens[_i2].downline = covered + 0.50 * (parentFraction * this.parentGens[_i2].flex); //}
-
-        covered += parentFraction * this.parentGens[_i2].flex;
-      }
-
-      return this.parentGens;
-    },
-    childPath: function childPath() {
-      var childTotalFlex = 0;
-
-      if (this.childGens) {
-        for (var i = 0; i < this.childGens.length; i++) {
-          childTotalFlex += this.childGens[i].flex;
-        }
-
-        var childFraction = 100 / childTotalFlex;
-
-        if (this.childGens !== undefined) {
-          for (var _i3 = 0, covered = 0; _i3 < this.childGens.length; _i3++) {
-            this.childGens[_i3].upline = covered + .5 * (childFraction * this.childGens[_i3].flex);
-            covered += childFraction * this.childGens[_i3].flex;
-          }
-        }
-      }
-
-      return this.childGens;
-    }
-  }
+  props: []
 });
 
 /***/ }),
@@ -6854,7 +6950,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.skill_image[data-v-0a1eea7e] {\n    height: 100px;\n    width:  100px;\n    -o-object-fit: contain;\n       object-fit: contain;\n}\n", ""]);
+exports.push([module.i, "\n.topic[data-v-0a1eea7e]:hover {\n    border: solid whitesmoke 2px;\n}\n.modalImage[data-v-0a1eea7e]:hover {\n    border: solid whitesmoke 2px;\n}\n.topicColCont[data-v-0a1eea7e] {\n    display: flex;\n    flex-direction: column;\n    background: #00ac95;\n}\n.topicsCont[data-v-0a1eea7e] {\n    display: flex;\n    flex-direction: row;\n    max-height: 330px;\n    min-height: 330px;\n    border: 1px solid green;\n    overflow-y: auto;\n}\n.topic[data-v-0a1eea7e] {\n    border: 1px gray solid;\n    max-height: 50px;\n    min-height: 50px;   \n    line-height: 30px; \n    box-sizing: border-box;\n    color: black;\n}\n.subSkillColCont[data-v-0a1eea7e] {\n    display: flex;\n    flex-direction: column;\n    background: #00ac95;\n}\n.modalHeader[data-v-0a1eea7e] {\n    flex-basis: 5%;\n    padding-left: 3%;\n    font-size: 20px;\n    background:#002722;\n    color: white;\n}\n.modalSkillDetailsBackdrop[data-v-0a1eea7e] {\n    display: flex;\n    position: fixed;\n    top: 0;\n    bottom: 0;\n    left: 0;\n    right: 0;\n    justify-content: center;\n    align-items: center;\n    height: 100vh;\n    width: 100vw;\n    background: rgba(0,0,0,0.3);\n}\n.modalImage[data-v-0a1eea7e] {\n    height: 250px;\n    width: 250px;\n}\n.skillDetailsModal[data-v-0a1eea7e] {\n    display: flex;\n    flex-direction: row;\n    opacity: 1;\n    background: #007a6a;\n    height: 50vh;\n    width: 50vw;\n}\n.skillDetailsModal div[data-v-0a1eea7e]:nth-child(2) {\n    display: flex;\n    flex-direction: column;\n    flex: 1;\n}\n.skillDetailsModal div[data-v-0a1eea7e]:nth-child(3) {\n    display: flex;\n    flex-direction: column;\n    flex: 3;\n}\n.skillCont[data-v-0a1eea7e] {\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    min-height: 110px;\n    min-width: 110px;\n}\nimg[data-v-0a1eea7e] {\n    height: 70px;\n    width:  70px;\n    -o-object-fit: contain;\n       object-fit: contain;\n    border: 3px solid gray;\n    border-radius: 4px;\n    background: white;\n}\n.svg[data-v-0a1eea7e] {\n    height:     25px;\n    display:    flex;\n    max-width:  100%;\n    width:      100%;\n}\n.branchLine[data-v-0a1eea7e] {\n    height: 2px;\n    max-width:  100%;\n    width:      100%;\n}\nline[data-v-0a1eea7e] {\n    stroke:rgb(171, 192, 192);\n    stroke-width:2;\n    stroke-linecap: round;\n}\n.hover[data-v-0a1eea7e] {\n    border: black solid 3px;\n}\n", ""]);
 
 // exports
 
@@ -6873,7 +6969,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.skillLevel[data-v-1b9f1905] {\n    display: flex;\n    flex-wrap: nowrap;\n    flex-direction: row;\n    width: inherit;\n    border: 1px solid greenyellow;\n}\n", ""]);
+exports.push([module.i, "\n.skillLevel[data-v-1b9f1905] {\n    display: flex;\n    flex-direction: row;\n    flex-basis: 100px;\n}\n", ""]);
 
 // exports
 
@@ -6892,7 +6988,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\nsvg[data-v-665c8e34] {\n    height: 50px;\n    display: flex;\n    max-width: 100%;\n    width : 100%;\n}\nline[data-v-665c8e34] {\n    stroke:rgb(255,0,0);\n    stroke-width:2\n}\n.markers[data-v-665c8e34] {\n    stroke:rgb(17, 209, 0);\n    stroke-width:1\n}\n", ""]);
+exports.push([module.i, "\nsvg[data-v-665c8e34] {\n    display:flex;\n    height: 50px;\n    display: flex;\n    max-width: 100%;\n    width : 100%;\n}\nline[data-v-665c8e34] {\n    stroke:rgb(255,0,0);\n    stroke-width:2\n}\n.markers[data-v-665c8e34] {\n    stroke:rgb(17, 209, 0);\n    stroke-width:1\n}\n", ""]);
 
 // exports
 
@@ -38747,12 +38843,203 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "skillCont", style: this.style }, [
-    _c("img", {
-      staticClass: "skill_image",
-      attrs: { src: _vm.skill.skill_image }
-    })
-  ])
+  return _c(
+    "div",
+    { staticClass: "skillCont" },
+    [
+      _vm.skill.parent_skills != "base"
+        ? _c("svg", { staticClass: "svg" }, [
+            _c("line", {
+              attrs: { x1: 50 + "%", y1: 0 + "%", x2: 50 + "%", y2: 100 + "%" }
+            })
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _c("img", {
+        attrs: { src: _vm.skill.skill_image },
+        on: {
+          mouseover: function($event) {
+            return _vm.SkillDetailsModalUp()
+          }
+        }
+      }),
+      _vm._v(" "),
+      _vm.skill.child_skills.length
+        ? _c("svg", { staticClass: "svg" }, [
+            _c("line", {
+              attrs: { x1: 50 + "%", y1: 0 + "%", x2: 50 + "%", y2: 100 + "%" }
+            })
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.skill.child_skills.length > 1
+        ? _c("svg", { staticClass: "branchLine" }, [
+            _c("line", {
+              attrs: {
+                x1: _vm.branch[0] + "%",
+                y1: 1,
+                x2: _vm.branch[1] + "%",
+                y2: 1
+              }
+            })
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.skill.child_skills.length
+        ? _c("skill-level", { attrs: { skills: _vm.skill.child_skills } })
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.showSkillDetails
+        ? _c(
+            "div",
+            {
+              staticClass: "modalSkillDetailsBackdrop",
+              on: {
+                click: function($event) {
+                  if ($event.target !== $event.currentTarget) {
+                    return null
+                  }
+                  $event.stopPropagation()
+                  return _vm.SkillDetailsModalDown()
+                }
+              }
+            },
+            [
+              _c("div", { staticClass: "skillDetailsModal p-2 rounded" }, [
+                _c("div", [
+                  _c("img", {
+                    staticClass: "modalImage",
+                    attrs: {
+                      src: _vm.skill.skill_image,
+                      "data-toggle": "tooltip",
+                      "data-placement": "bottom",
+                      title: "Show full topics tree"
+                    },
+                    on: {
+                      click: function($event) {
+                        return _vm.showTopicTree()
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { style: { fontSize: "50px", textAlign: "center" } },
+                    [_vm._v(_vm._s(_vm.skill.skill_name))]
+                  ),
+                  _vm._v(" "),
+                  _c("div", { style: { overflowY: "auto", padding: "10px" } }, [
+                    _vm._v(_vm._s(_vm.skill.skill_description))
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "pl-2 ml-2 d-flex flex-column" }, [
+                  _c("div", { staticClass: "topicColCont" }, [
+                    _c(
+                      "div",
+                      {
+                        staticClass: "modalHeader",
+                        style: { display: "flex", flexDirection: "row" }
+                      },
+                      [
+                        _c("div", [_vm._v("Topics")]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "ml-3" }, [
+                          _c(
+                            "span",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: _vm.skill.subjects.length > 0,
+                                  expression: "skill.subjects.length > 0"
+                                }
+                              ]
+                            },
+                            [_vm._v(_vm._s(_vm.skill.subjects.length))]
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "svg",
+                          {
+                            attrs: {
+                              xmlns: "http://www.w3.org/2000/svg",
+                              width: "25",
+                              height: "25",
+                              viewBox: "0 0 18 18"
+                            },
+                            on: {
+                              click: function($event) {
+                                return _vm.SkillDetailsModalDown()
+                              }
+                            }
+                          },
+                          [
+                            _c("path", {
+                              attrs: {
+                                d:
+                                  "M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"
+                              }
+                            })
+                          ]
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "topicsCont" },
+                      _vm._l(_vm.skill.subjects, function(subject) {
+                        return _c(
+                          "div",
+                          {
+                            key: subject.skill_id + " - " + subject.id,
+                            staticClass: "topic m-1 p-2"
+                          },
+                          [
+                            _vm._v(
+                              "\n                            " +
+                                _vm._s(subject.subject_title) +
+                                "\n                        "
+                            )
+                          ]
+                        )
+                      }),
+                      0
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "subSkillColCont" }, [
+                    _c("div", { staticClass: "modalHeader" }, [
+                      _vm._v("Sub-skills")
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass: "d-flex flex-row",
+                        style: { border: "1px solid green", overflowY: "auto" }
+                      },
+                      _vm._l(_vm.skill.child_skills, function(child) {
+                        return _c("img", {
+                          key: child.id,
+                          staticClass: "m-1",
+                          attrs: { src: child.skill_image }
+                        })
+                      }),
+                      0
+                    )
+                  ])
+                ])
+              ])
+            ]
+          )
+        : _vm._e()
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -38779,10 +39066,17 @@ var render = function() {
   return _c(
     "div",
     { staticClass: "skillLevel" },
-    _vm._l(_vm.skills, function(skill) {
-      return _c("skill-cont", { key: skill.id, attrs: { skill: skill } })
-    }),
-    1
+    [
+      _vm._l(_vm.skills, function(child) {
+        return _c("skill-cont", {
+          key: child.id,
+          attrs: { skill: child, siblings: _vm.skills.length }
+        })
+      }),
+      _vm._v(" "),
+      _vm.skills.child_skills ? _c("skill-path") : _vm._e()
+    ],
+    2
   )
 }
 var staticRenderFns = []
@@ -38807,47 +39101,11 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "svg",
-    [
-      _vm._l(_vm.parentPath, function(parent, index) {
-        return _c("line", {
-          key: index,
-          attrs: {
-            x1: parent.downline + "%",
-            y1: 5 + "%",
-            x2: parent.downline + "%",
-            y2: 50 + "%"
-          }
-        })
-      }),
-      _vm._v(" "),
-      _vm._l(_vm.childPath, function(child, index) {
-        return _c("line", {
-          key: index + "ul",
-          attrs: {
-            x1: child.upline + "%",
-            y1: 50 + "%",
-            x2: child.upline + "%",
-            y2: 95 + "%"
-          }
-        })
-      }),
-      _vm._v(" "),
-      _vm._l(_vm.childPath, function(branch, index) {
-        return _c("line", {
-          key: index + "bl",
-          attrs: {
-            x1: branch.upline + "%",
-            x2: branch.parent_skills.downline + "%",
-            y1: 50 + "%",
-            y2: 50 + "%"
-          }
-        })
-      })
-    ],
-    2
-  )
+  return _c("svg", { staticClass: "path" }, [
+    _c("line", {
+      attrs: { x1: 50 + "%", y1: 5 + "%", x2: 50 + "%", y2: 50 + "%" }
+    })
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true

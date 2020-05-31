@@ -10,3 +10,25 @@
     width: 100px;
     height: 100px;
 }
+
+.header {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    background-color: #a99a15;
+    color: black;
+    border: 1px solid #1525a9;
+}
+
+.headerCont {
+    border: gray 5px solid;
+}
+
+body {
+    background-image: url('https://ak.picdn.net/shutterstock/videos/1013215220/thumb/1.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.stHover {
+    filter: contrast(200%);
+}

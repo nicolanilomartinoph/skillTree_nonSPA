@@ -82,21 +82,20 @@
                 </div>
             @endif
             <div class="container">
-            <nav class="navbar">
-                <a href="#" class="navbar-brand txt mr-auto">Skill Tree</a>
-                <a href="/skills" class="navbar-nav mr-auto">Skills</a>
-                <a href="/jobs" class="navbar-nav mr-auto">Jobs</a>
-                <a href="/about" class="navbar-nav mr-auto">About</a>
-            </nav>
-
-            <div class="content">
-                <div class="title m-b-md">
-                    Skill Tree
+                <nav class="navbar">
+                    <a href="#" class="navbar-brand txt mr-auto">Skill Tree</a>
+                    <a href="/skills" class="navbar-nav mr-auto">Skills</a>
+                    <a href="/jobs" class="navbar-nav mr-auto">Jobs</a>
+                    <a href="/about" class="navbar-nav mr-auto">About</a>
+                </nav>
+                <div class="content">
+                    <div class="title m-b-md">
+                        Skill Tree
+                    </div>
+                    <div class="mx-4 txt">
+                        See the path before even taking it. Check job skill requirements and end points you can take with skill Tree.
+                    </div>
                 </div>
-                <div class="mx-4 txt">
-                    See the path before even taking it. Check job skill requirements and end points you can take with skill Tree.
-                </div>
-            </div>
             </div>
         </div>
     </body>

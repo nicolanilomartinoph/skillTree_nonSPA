@@ -18,6 +18,7 @@ class CreateJobsTable extends Migration
             $table->string('job_name');
             $table->longText('job_description');
             $table->json('base_skills')->nullable();
+            $table->json('aux')->nullable();
             $table->binary('job_image')->nullable();
         });
     }
