@@ -4,14 +4,17 @@
     <div class="container">
         <div class="row jobDetails justify-content-sm-center">
             <div class="col-lg-4 col-md-6 col-sm-12 align-items-center">
-                <img src="data:image/png;base64, {{ base64_encode($job_details->job_image) }}" class="align-items-center rounded job-icon"/>
+                <img src="data:image/png;base64, {{ base64_encode($details->image) }}" class="align-items-center rounded job-icon"/>
             </div>
             <div class="col-lg-8 col-md-6 my-4 ">
-                <div class="col-12 jobName">{{ $job_details->job_name }}</div>
-                <div class="col-12 jobDesc">{{ $job_details->job_description }}</div> 
+                <div class="col-12 jobName">{{ $details->title }}</div>
+                <div class="col-12 jobDesc">{{ $details->description }}</div> 
             </div>
         </div>
-        <Skill-tree :skills_details="{{ json_encode($base_skills) }}" :aux="{{ json_encode($aux) }}"/>
+        <skill-tree 
+            :skills-details="{{ json_encode($base) }}"
+            :aux="{{ json_encode($aux) }}"
+        />
     </div>
 @endsection
 

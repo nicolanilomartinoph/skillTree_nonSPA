@@ -16,14 +16,14 @@ class CreateSkillsTable extends Migration
     {
         Schema::create('skills', function (Blueprint $table) {
             $table->id();
-            $table->string('skill_name');
-            $table->longtext('skill_description');
-            $table->json('parent_skills')->nullable();
-            $table->json('child_skills')->nullable();
+            $table->string('title');
+            $table->longtext('description');
+            $table->json('parents')->nullable();
+            $table->json('children')->nullable();
             //$table->binary('skill_image')->nullable();    Because MEDIUMBLOB is not supported
             
         });
-        DB::statement("ALTER TABLE skills ADD skill_image MEDIUMBLOB");
+        DB::statement("ALTER TABLE skills ADD image MEDIUMBLOB");
     }
 
     /**

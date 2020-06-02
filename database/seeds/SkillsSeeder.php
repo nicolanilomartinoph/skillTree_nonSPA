@@ -53,11 +53,11 @@ class SkillsSeeder extends Seeder
         foreach($skills as $key => $skill)
         {
             DB::table('skills')->insert([
-                'skill_name' => $key,
-                'skill_description' => $skill->skill_description,
-                'skill_image' => file_get_contents(storage_path($skill->skill_image)),
-                'parent_skills' => json_encode($skill->parent_skills),
-                'child_skills' => json_encode($skill->child_skills),
+                'title' => $key,
+                'description' => $skill->description,
+                'image' => file_get_contents(storage_path($skill->image)),
+                'parents' => json_encode($skill->parents),
+                'children' => json_encode($skill->children),
             ]);
         }
     }

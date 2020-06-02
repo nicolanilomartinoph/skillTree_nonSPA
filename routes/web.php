@@ -25,14 +25,4 @@ Route::get('/jobs', function() {
     return view('jobs');
 });
 Route::get('/jobs/{job}', 'JobsController@show');
-
-/*
-Route::get('/skills', function() {
-    return "skills";
-});
-
-
-Route::get('/about', function() {
-    return "about";
-});
-*/
+Route::get('/jobs/{job}/subject', 'SubjectController@show');

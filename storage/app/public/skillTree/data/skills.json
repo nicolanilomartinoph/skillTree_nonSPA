@@ -1,134 +1,134 @@
 {
     "HTML" : {
-        "skill_description" : "put skill description here",
-        "skill_image" : "app/public/skillTree/images/HTML/html_icon.png",
-        "parent_skills" : ["base"],
-        "child_skills" : []
+        "description" : "put skill description here",
+        "image" : "app/public/skillTree/images/HTML/html_icon.png",
+        "parents" : ["base"],
+        "children" : []
     },
     "CSS" : {
-        "skill_description" : "put skill description here",
-        "skill_image" : "app/public/skillTree/images/CSS/css_icon.png",
-        "parent_skills" : ["base"],
-        "child_skills" : [3,4]
+        "description" : "put skill description here",
+        "image" : "app/public/skillTree/images/CSS/css_icon.png",
+        "parents" : ["base"],
+        "children" : [3,4]
     },
     "SASS" : {
-        "skill_description" : "put skill description here",
-        "skill_image" : "app/public/skillTree/images/CSS/sass_icon.png",
-        "parent_skills" : [2],
-        "child_skills" : []
+        "description" : "put skill description here",
+        "image" : "app/public/skillTree/images/CSS/sass_icon.png",
+        "parents" : [2],
+        "children" : []
     },
     "Bootstrap" : {
-        "skill_description" : "put skill description here",
-        "skill_image" : "app/public/skillTree/images/CSS/bootstrap_4_icon.jpeg",
-        "parent_skills" : [2],
-        "child_skills" : []
+        "description" : "put skill description here",
+        "image" : "app/public/skillTree/images/CSS/bootstrap_4_icon.jpeg",
+        "parents" : [2],
+        "children" : []
     },
     "Javascript" : {
-        "skill_description" : "put skill description here",
-        "skill_image" : "app/public/skillTree/images/JS/javascript_icon.jpg",
-        "parent_skills" : ["base"],
-        "child_skills" : [6,7,8]
+        "description" : "put skill description here",
+        "image" : "app/public/skillTree/images/JS/javascript_icon.jpg",
+        "parents" : ["base"],
+        "children" : [6,7,8]
     },
     "ReactJS" : {
-        "skill_description" : "put skill description here",
-        "skill_image" : "app/public/skillTree/images/JS/reactjs_icon.png",
-        "parent_skills" : [5],
-        "child_skills" : [10]
+        "description" : "put skill description here",
+        "image" : "app/public/skillTree/images/JS/reactjs_icon.png",
+        "parents" : [5],
+        "children" : [10]
     },
     "VueJS" : {
-        "skill_description" : "put skill description here",
-        "skill_image" : "app/public/skillTree/images/JS/vuejs_icon.png",
-        "parent_skills" : [5],
-        "child_skills" : [9]
+        "description" : "put skill description here",
+        "image" : "app/public/skillTree/images/JS/vuejs_icon.png",
+        "parents" : [5],
+        "children" : [9]
     },
     "Angular" : {
-        "skill_description" : "put skill description here",
-        "skill_image" : "app/public/skillTree/images/JS/angular_icon.png",
-        "parent_skills" : [5],
-        "child_skills" : []
+        "description" : "put skill description here",
+        "image" : "app/public/skillTree/images/JS/angular_icon.png",
+        "parents" : [5],
+        "children" : []
     },
     "Vuex" : {
-        "skill_description" : "put skill description here",
-        "skill_image" : "app/public/skillTree/images/JS/vuex_icon.png",
-        "parent_skills" : [7],
-        "child_skills" : []
+        "description" : "put skill description here",
+        "image" : "app/public/skillTree/images/JS/vuex_icon.png",
+        "parents" : [7],
+        "children" : []
     },
     "Redux" : {
-        "skill_description" : "put skill description here",
-        "skill_image" : "app/public/skillTree/images/JS/redux_icon.png",
-        "parent_skills" : [6],
-        "child_skills" : []
+        "description" : "put skill description here",
+        "image" : "app/public/skillTree/images/JS/redux_icon.png",
+        "parents" : [6],
+        "children" : []
     },
     "PHP" : {
-        "skill_description" : "put skill description here",
-        "skill_image" : "app/public/skillTree/images/PHP/php_logo.png",
-        "parent_skills" : ["base"],
-        "child_skills" : [12,13,14]
+        "description" : "put skill description here",
+        "image" : "app/public/skillTree/images/PHP/php_logo.png",
+        "parents" : ["base"],
+        "children" : [12,13,14]
     },
     "Code Igniter" : {
-        "skill_description" : "put skill description here",
-        "skill_image" : "app/public/skillTree/images/PHP/codeIgniter_icon.jpg",
-        "parent_skills" : [],
-        "child_skills" : []
+        "description" : "put skill description here",
+        "image" : "app/public/skillTree/images/PHP/codeIgniter_icon.jpg",
+        "parents" : [],
+        "children" : []
     },
     "Laravel" : {
-        "skill_description" : "put skill description here",
-        "skill_image" : "app/public/skillTree/images/PHP/laravel_icon.png",
-        "parent_skills" : [],
-        "child_skills" : []
+        "description" : "put skill description here",
+        "image" : "app/public/skillTree/images/PHP/laravel_icon.png",
+        "parents" : [],
+        "children" : []
     },
     "Symphony" : {
-        "skill_description" : "put skill description here",
-        "skill_image" : "app/public/skillTree/images/PHP/symfony_icon.png",
-        "parent_skills" : [],
-        "child_skills" : []
+        "description" : "put skill description here",
+        "image" : "app/public/skillTree/images/PHP/symfony_icon.png",
+        "parents" : [],
+        "children" : []
     },
     "Bit Bucket" : {
-        "skill_description" : "put skill description here",
-        "skill_image" : "app/public/skillTree/images/auxiliary_skills/bitbucket_icon.png",
-        "parent_skills" : [18],
-        "child_skills" : []
+        "description" : "put skill description here",
+        "image" : "app/public/skillTree/images/auxiliary_skills/bitbucket_icon.png",
+        "parents" : [18],
+        "children" : []
     },
     "Circle Ci" : {
-        "skill_description" : "put skill description here",
-        "skill_image" : "app/public/skillTree/images/auxiliary_skills/circle_ci_icon.png",
-        "parent_skills" : ["base"],
-        "child_skills" : []
+        "description" : "put skill description here",
+        "image" : "app/public/skillTree/images/auxiliary_skills/circle_ci_icon.png",
+        "parents" : ["base"],
+        "children" : []
     },
     "Docker" : {
-        "skill_description" : "put skill description here",
-        "skill_image" : "app/public/skillTree/images/auxiliary_skills/docker_icon.png",
-        "parent_skills" : ["base"],
-        "child_skills" : []
+        "description" : "put skill description here",
+        "image" : "app/public/skillTree/images/auxiliary_skills/docker_icon.png",
+        "parents" : ["base"],
+        "children" : []
     },
     "Git" : {
-        "skill_description" : "put skill description here",
-        "skill_image" : "app/public/skillTree/images/auxiliary_skills/git_icon.png",
-        "parent_skills" : ["base"],
-        "child_skills" : [15,19,20,21]
+        "description" : "put skill description here",
+        "image" : "app/public/skillTree/images/auxiliary_skills/git_icon.png",
+        "parents" : ["base"],
+        "children" : [15,19,20,21]
     },
     "Github" : {
-        "skill_description" : "put skill description here",
-        "skill_image" : "app/public/skillTree/images/auxiliary_skills/github_icon.png",
-        "parent_skills" : [18],
-        "child_skills" : []
+        "description" : "put skill description here",
+        "image" : "app/public/skillTree/images/auxiliary_skills/github_icon.png",
+        "parents" : [18],
+        "children" : []
     },
     "Git Kraken" : {
-        "skill_description" : "put skill description here",
-        "skill_image" : "app/public/skillTree/images/auxiliary_skills/gitkraken_icon.png",
-        "parent_skills" : [18],
-        "child_skills" : []
+        "description" : "put skill description here",
+        "image" : "app/public/skillTree/images/auxiliary_skills/gitkraken_icon.png",
+        "parents" : [18],
+        "children" : []
     },
     "Git Lab" : {
-        "skill_description" : "put skill description here",
-        "skill_image" : "app/public/skillTree/images/auxiliary_skills/gitlab_icon.png",
-        "parent_skills" : [18],
-        "child_skills" : []
+        "description" : "put skill description here",
+        "image" : "app/public/skillTree/images/auxiliary_skills/gitlab_icon.png",
+        "parents" : [18],
+        "children" : []
     },
     "loopback" : {
-        "skill_description" : "put skill description here",
-        "skill_image" : "app/public/skillTree/images/auxiliary_skills/loopback_icon.png",
-        "parent_skills" : ["base"],
-        "child_skills" : []
+        "description" : "put skill description here",
+        "image" : "app/public/skillTree/images/auxiliary_skills/loopback_icon.png",
+        "parents" : ["base"],
+        "children" : []
     }
 }

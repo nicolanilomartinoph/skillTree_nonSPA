@@ -1,12 +1,12 @@
 <template>
     <div class="skillLevel">
-        <skill-cont 
+        <skill-cont
             v-for="child in skills" 
             :key="child.id" 
             :skill="child" 
             :siblings="skills.length"
         />
-        <skill-path v-if="skills.child_skills" />
+        <skill-path v-if="skills.children" />
     </div>
 </template>
 

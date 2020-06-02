@@ -15,66 +15,66 @@ class SubjectSeeder extends Seeder
         // Create a JSON file that contains the SKILL-SUBJECT PAIR
         DB::table('subjects')->insert([
             'skill_id' => 1,
-            'subject_title' => 'HTML Basics 1',
-            'subject_description' => 'First thing about HTML is bla bla blah'
+            'title' => 'HTML Basics 1',
+            'description' => 'First thing about HTML is bla bla blah'
         ]);
         DB::table('subjects')->insert([
             'skill_id' => 1,
-            'subject_title' => 'HTML Basics 2',
-            'subject_description' => 'Second thing about HTML is bla bla blah'
+            'title' => 'HTML Basics 2',
+            'description' => 'Second thing about HTML is bla bla blah'
         ]);
         DB::table('subjects')->insert([
             'skill_id' => 1,
-            'subject_title' => 'HTML Basics 3',
-            'subject_description' => 'First thing about HTML is bla bla blah'
+            'title' => 'HTML Basics 3',
+            'description' => 'First thing about HTML is bla bla blah'
         ]);
         DB::table('subjects')->insert([
             'skill_id' => 1,
-            'subject_title' => 'HTML Basics 4',
-            'subject_description' => 'Second thing about HTML is bla bla blah'
+            'title' => 'HTML Basics 4',
+            'description' => 'Second thing about HTML is bla bla blah'
         ]);
         DB::table('subjects')->insert([
             'skill_id' => 1,
-            'subject_title' => 'HTML Basics 5',
-            'subject_description' => 'First thing about HTML is bla bla blah'
+            'title' => 'HTML Basics 5',
+            'description' => 'First thing about HTML is bla bla blah'
         ]);
 
         DB::table('subjects')->insert([
             'skill_id' => 1,
-            'subject_title' => 'HTML Basics 6',
-            'subject_description' => 'Second thing about HTML is bla bla blah'
+            'title' => 'HTML Basics 6',
+            'description' => 'Second thing about HTML is bla bla blah'
         ]);
         DB::table('subjects')->insert([
             'skill_id' => 1,
-            'subject_title' => 'HTML Basics 7',
-            'subject_description' => 'Second thing about HTML is bla bla blah'
+            'title' => 'HTML Basics 7',
+            'description' => 'Second thing about HTML is bla bla blah'
         ]);
         DB::table('subjects')->insert([
             'skill_id' => 1,
-            'subject_title' => 'HTML Basics 8',
-            'subject_description' => 'First thing about HTML is bla bla blah'
+            'title' => 'HTML Basics 8',
+            'description' => 'First thing about HTML is bla bla blah'
         ]);
 
         DB::table('subjects')->insert([
             'skill_id' => 1,
-            'subject_title' => 'HTML Basics 9',
-            'subject_description' => 'Second thing about HTML is bla bla blah'
+            'title' => 'HTML Basics 9',
+            'description' => 'Second thing about HTML is bla bla blah'
         ]);
 
         DB::table('subjects')->insert([
             'skill_id' => 2,
-            'subject_title' => 'CSS Basics 1',
-            'subject_description' => 'First thing about CSS is bla bla blah'
+            'title' => 'CSS Basics 1',
+            'description' => 'First thing about CSS is bla bla blah'
         ]);
         DB::table('subjects')->insert([
             'skill_id' => 2,
-            'subject_title' => 'CSS Basics 2',
-            'subject_description' => 'Second thing about CSS is bla bla blah'
+            'title' => 'CSS Basics 2',
+            'description' => 'Second thing about CSS is bla bla blah'
         ]);
         DB::table('subjects')->insert([
             'skill_id' => 2,
-            'subject_title' => 'CSS Basics 3',
-            'subject_description' => 'THIRD thing about CSS is bla bla blah'
+            'title' => 'CSS Basics 3',
+            'description' => 'THIRD thing about CSS is bla bla blah'
         ]);
     }
 }

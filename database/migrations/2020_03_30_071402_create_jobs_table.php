@@ -15,11 +15,11 @@ class CreateJobsTable extends Migration
     {
         Schema::create('jobs', function (Blueprint $table) {
             $table->id();
-            $table->string('job_name');
-            $table->longText('job_description');
-            $table->json('base_skills')->nullable();
+            $table->string('title');
+            $table->longText('description');
+            $table->json('base')->nullable();
             $table->json('aux')->nullable();
-            $table->binary('job_image')->nullable();
+            $table->binary('image')->nullable();
         });
     }
 

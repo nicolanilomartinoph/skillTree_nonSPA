@@ -22,22 +22,22 @@ function skill_unpacker($skill, $recursive = true, &$parent_skills = null)
         $raw_skill = \App\Skill::find($id);
         
         // Fix skill image (to prepare it for json_encode)
-        $raw_skill['skill_image'] = 'data:image/png;base64,'.base64_encode($raw_skill['skill_image']);
+        $raw_skill['image'] = 'data:image/png;base64,'.base64_encode($raw_skill['image']);
 
         // Append Skill's subjects
         $raw_skill['subjects'] = $raw_skill->subjects;
 
         // Unpack JSONs to regular PHP arrays so it's readable by PHP as array(array contents will be unpacked)
-        $raw_skill->parent_skills = json_decode($raw_skill->parent_skills);
+        $raw_skill->parents = json_decode($raw_skill->parents);
 
-        $raw_skill->child_skills = json_decode($raw_skill->child_skills);
+        $raw_skill->children = json_decode($raw_skill->children);
         $raw_skill = $raw_skill->toArray();
 
         // then unpack skill if there is a child skill
-        if($raw_skill['child_skills'] && $recursive)
+        if($raw_skill['children'] && $recursive)
         {
             // Then sign the returned value to the child skills array
-            $raw_skill['child_skills'] = skill_unpacker($raw_skill['child_skills'], true);
+            $raw_skill['children'] = skill_unpacker($raw_skill['children'], true);
         }
 
         // Assign the skill back to the index

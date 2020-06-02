@@ -1908,6 +1908,7 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _var_www_html_skillTree_nonSPA_resources_js_app_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./resources/js/app.js */ "./resources/js/app.js");
 //
 //
 //
@@ -2107,6 +2108,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['skill', 'siblings'],
   data: function data() {
@@ -2118,11 +2121,11 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     branch: function branch() {
-      if (this.skill.child_skills.length > 0) {
-        var fractions = 100 / this.skill.child_skills.length;
+      if (this.skill.children.length > 0) {
+        var fractions = 100 / this.skill.children.length;
         var offsetFraction = fractions / 2;
         var branchStart = offsetFraction;
-        var branchEnd = branchStart + fractions * (this.skill.child_skills.length - 1);
+        var branchEnd = branchStart + fractions * (this.skill.children.length - 1);
         var x = [branchStart, branchEnd];
         return x;
       } else {
@@ -2133,17 +2136,18 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     SkillDetailsModalUp: function SkillDetailsModalUp() {
       this.showSkillDetails = true;
-      console.log("UP");
     },
     SkillDetailsModalDown: function SkillDetailsModalDown() {
       this.showSkillDetails = false;
-      console.log("DOWN");
     },
     showTopicTree: function showTopicTree() {
       this.click = true;
     },
     hoverToggle: function hoverToggle(x) {
       this.hover = !this.hover;
+    },
+    subjectView: function subjectView() {
+      _var_www_html_skillTree_nonSPA_resources_js_app_js__WEBPACK_IMPORTED_MODULE_0__["bus"].$emit('subject-view', 'testdata');
     }
   }
 });
@@ -2220,7 +2224,19 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _SkillLevel_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SkillLevel.vue */ "./resources/js/components/skills/SkillLevel.vue");
+/* harmony import */ var _var_www_html_skillTree_nonSPA_resources_js_app_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./resources/js/app.js */ "./resources/js/app.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2267,141 +2283,33 @@ __webpack_require__.r(__webpack_exports__);
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['skills_details'],
+  props: ['skillsDetails', 'aux'],
   data: function data() {
     return {
-      gensPerLevel: []
-      /*
-      tree_data: { // This data sorts skills per parent
-          limbs: this.skills_details,
-      },
-      */
-
+      skillView: "base",
+      stHoverBase: false,
+      stHoverAux: false,
+      view: 'skill'
     };
   },
-  // Here we will use the concept of a family tree for the variables
   methods: {
-    get_limb_generations_data: function get_limb_generations_data(skills) {
-      var _this = this;
-
-      var parent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-      var ancestor = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-      // BASE OR NOT ???
-      skills.forEach(function (skill) {
-        if (skill.parent_skills[0] === "base") {
-          skill.limb_data = [], skill.gen_nth = 1; //console.log("Setting base_data of " + skill.skill_name)
-        } else {
-          //console.log("ATTACHING branch_data to " + skill.skill_name)
-          skill.branch_data = {
-            gen_nth: parent.gen_nth + 1,
-            siblings: [skill.skill_name]
-          };
-          skill.gen_nth = parent.gen_nth + 1;
-          var our_gens_data_object = null; //console.log("let's check our ancestor's limb_data for our generations data ")
-
-          for (var i = 0; i < ancestor.limb_data.length; i++) {
-            if (ancestor.limb_data[i].gen_nth === skill.branch_data.gen_nth) {
-              our_gens_data_object = ancestor.limb_data[i]; //console.log("FOUND OUR DATA")
-
-              break;
-            } else {//console.log("DID NOT FIND IT")
-            }
-          }
-
-          if (!our_gens_data_object) {
-            //console.log("I didn't find our data so I'm pushing my data as our gens data")
-            ancestor.limb_data.push(skill.branch_data);
-          } else {
-            //console.log("I found our data, adding my name to it")
-            our_gens_data_object.siblings.push(skill.skill_name);
-          }
-        }
-      }); // Recurse
-
-      skills.forEach(function (skill) {
-        //console.log("CHECK IF RECURSION IS NEEDED FOR " + skill.skill_name + "'s child")
-        if (skill.gen_nth === 1) {
-          if (skill.child_skills.length) {
-            skill.child_skills.forEach(function (element) {
-              //console.log(element.skill_name + " OF " + skill.skill_name)
-              _this.get_limb_generations_data(new Array(element), skill, skill);
-            });
-          } //else console.log(skill.skill_name + " has no child")
-
-        } else {
-          if (skill.child_skills.length) {
-            //console.log("There is child of " + skill.skill_name)
-            skill.child_skills.forEach(function (element) {
-              //console.log("recursing " + element.skill_name + " OF " + skill.skill_name)
-              _this.get_limb_generations_data(new Array(element), skill, ancestor);
-            });
-          } //else console.log(skill.skill_name + " has no child")
-
-        }
-      });
+    hoverBase: function hoverBase() {
+      this.stHoverBase = !this.stHoverBase;
     },
-    get_tree_generations_data: function get_tree_generations_data(limbs) {
-      // Find the depth
-      limbs.forEach(function (limb) {
-        limb.depth = limb.limb_data.length + 1;
-      });
-      limbs.forEach(function (limb) {
-        limb.widest = {
-          "gen": 1,
-          "width": 1
-        };
-        limb.limb_data.forEach(function (limb_datum) {
-          if (limb.widest.gen < limb_datum.siblings.length) {
-            limb.widest = {
-              "gen": limb_datum.gen_nth,
-              "width": limb_datum.siblings.length
-            };
-          }
-        });
-      });
+    hoverAux: function hoverAux() {
+      this.stHoverAux = !this.stHoverAux;
     },
-    skills: function skills() {
-      var x = _.cloneDeep(this.skills_details);
-
-      tagSkillGensInfo(x, null, this.gensPerLevel, this.gens);
-      /**
-       * This fn sorts skills in per level manner
-       * - watch out for self-calling functions
-       */
-
-      function tagSkillGensInfo() {
-        var skills = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : x;
-        var parent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-        var levels = arguments.length > 2 ? arguments[2] : undefined;
-        var gens = arguments.length > 3 ? arguments[3] : undefined;
-
-        var _loop = function _loop(i) {
-          // Tagging a gen_nth to skills
-          skills[i].gen_nth = skills[i].parent_skills[0] === "base" ? 1 : function () {
-            skills[i].parent_skills = parent;
-            return parent.gen_nth + 1;
-          }(); // Add yourself to your own level gen
-
-          levels[skills[i].gen_nth - 1] ? levels[skills[i].gen_nth - 1].push(skills[i]) : levels.push(Array.of(skills[i])); // Tagging the skill's with its siblings by obj reference (CAUTION: still refers to self as sibling)
-
-          skills[i].siblings = parent ? parent.child_skills : skills; // Determine "flex : Number" for css width of each skill
-
-          skills[i].flex = skills[i].child_skills.length <= 1 ? 1 : skills[i].child_skills.length + 1; // Time to recurse
-
-          tagSkillGensInfo(skills[i].child_skills, skills[i], levels, gens);
-        };
-
-        for (var i = 0; i < skills.length; i++) {
-          _loop(i);
-        }
-      }
+    viewToggler: function viewToggler() {
+      this.view === 'subject' ? 'skill' : 'subject';
     }
   },
   created: function created() {
-    this.skills();
-  },
-  components: {
-    'skill-level': _SkillLevel_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
+    var _this = this;
+
+    _var_www_html_skillTree_nonSPA_resources_js_app_js__WEBPACK_IMPORTED_MODULE_0__["bus"].$on('subject-view', function (data) {
+      console.log(data);
+      _this.view = 'subject';
+    });
   }
 });
 
@@ -6950,7 +6858,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.topic[data-v-0a1eea7e]:hover {\n    border: solid whitesmoke 2px;\n}\n.modalImage[data-v-0a1eea7e]:hover {\n    border: solid whitesmoke 2px;\n}\n.topicColCont[data-v-0a1eea7e] {\n    display: flex;\n    flex-direction: column;\n    background: #00ac95;\n}\n.topicsCont[data-v-0a1eea7e] {\n    display: flex;\n    flex-direction: row;\n    max-height: 330px;\n    min-height: 330px;\n    border: 1px solid green;\n    overflow-y: auto;\n}\n.topic[data-v-0a1eea7e] {\n    border: 1px gray solid;\n    max-height: 50px;\n    min-height: 50px;   \n    line-height: 30px; \n    box-sizing: border-box;\n    color: black;\n}\n.subSkillColCont[data-v-0a1eea7e] {\n    display: flex;\n    flex-direction: column;\n    background: #00ac95;\n}\n.modalHeader[data-v-0a1eea7e] {\n    flex-basis: 5%;\n    padding-left: 3%;\n    font-size: 20px;\n    background:#002722;\n    color: white;\n}\n.modalSkillDetailsBackdrop[data-v-0a1eea7e] {\n    display: flex;\n    position: fixed;\n    top: 0;\n    bottom: 0;\n    left: 0;\n    right: 0;\n    justify-content: center;\n    align-items: center;\n    height: 100vh;\n    width: 100vw;\n    background: rgba(0,0,0,0.3);\n}\n.modalImage[data-v-0a1eea7e] {\n    height: 250px;\n    width: 250px;\n}\n.skillDetailsModal[data-v-0a1eea7e] {\n    display: flex;\n    flex-direction: row;\n    opacity: 1;\n    background: #007a6a;\n    height: 50vh;\n    width: 50vw;\n}\n.skillDetailsModal div[data-v-0a1eea7e]:nth-child(2) {\n    display: flex;\n    flex-direction: column;\n    flex: 1;\n}\n.skillDetailsModal div[data-v-0a1eea7e]:nth-child(3) {\n    display: flex;\n    flex-direction: column;\n    flex: 3;\n}\n.skillCont[data-v-0a1eea7e] {\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    min-height: 110px;\n    min-width: 110px;\n}\nimg[data-v-0a1eea7e] {\n    height: 70px;\n    width:  70px;\n    -o-object-fit: contain;\n       object-fit: contain;\n    border: 3px solid gray;\n    border-radius: 4px;\n    background: white;\n}\n.svg[data-v-0a1eea7e] {\n    height:     25px;\n    display:    flex;\n    max-width:  100%;\n    width:      100%;\n}\n.branchLine[data-v-0a1eea7e] {\n    height: 2px;\n    max-width:  100%;\n    width:      100%;\n}\nline[data-v-0a1eea7e] {\n    stroke:rgb(171, 192, 192);\n    stroke-width:2;\n    stroke-linecap: round;\n}\n.hover[data-v-0a1eea7e] {\n    border: black solid 3px;\n}\n", ""]);
+exports.push([module.i, "\n.topic[data-v-0a1eea7e]:hover {\n    border: solid whitesmoke 2px;\n}\n.modalImage[data-v-0a1eea7e]:hover {\n    border: solid whitesmoke 2px;\n}\n.topicColCont[data-v-0a1eea7e] {\n    display: flex;\n    flex-direction: column;\n    background: #00ac95;\n}\n.topicsCont[data-v-0a1eea7e] {\n    display: flex;\n    flex-direction: row;\n    max-height: 330px;\n    min-height: 330px;\n    border: 1px solid green;\n    overflow-y: auto;\n}\n.topic[data-v-0a1eea7e] {\n    border: 1px gray solid;\n    max-height: 50px;\n    min-height: 50px;   \n    line-height: 30px; \n    box-sizing: border-box;\n    color: black;\n}\n.subSkillColCont[data-v-0a1eea7e] {\n    display: flex;\n    flex-direction: column;\n    background: #00ac95;\n}\n.modalHeader[data-v-0a1eea7e] {\n    flex-basis: 5%;\n    padding-left: 3%;\n    font-size: 20px;\n    background:#002722;\n    color: white;\n}\n.modalSkillDetailsBackdrop[data-v-0a1eea7e] {\n    display: flex;\n    position: fixed;\n    top: 0;\n    bottom: 0;\n    left: 0;\n    right: 0;\n    justify-content: center;\n    align-items: center;\n    height: 100vh;\n    width: 100vw;\n    background: rgba(0,0,0,0.3);\n}\n.modalImage[data-v-0a1eea7e] {\n    height: 250px;\n    width: 250px;\n}\n.skillDetailsModal[data-v-0a1eea7e] {\n    display: flex;\n    flex-direction: row;\n    opacity: 1;\n    background: #007a6a;\n    height: 50vh;\n    width: 50vw;\n}\n.skillDetailsModal div[data-v-0a1eea7e]:nth-child(2) {\n    display: flex;\n    flex-direction: column;\n    flex: 1;\n}\n.skillDetailsModal div[data-v-0a1eea7e]:nth-child(3) {\n    display: flex;\n    flex-direction: column;\n    flex: 3;\n}\n.skillCont[data-v-0a1eea7e] {\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    min-height: 110px;\n    min-width: 110px;\n}\nimg[data-v-0a1eea7e] {\n    height: 70px;\n    width:  70px;\n    -o-object-fit: contain;\n       object-fit: contain;\n    border: 3px solid gray;\n    border-radius: 4px;\n    background: white;\n}\n.svg[data-v-0a1eea7e] {\n    height:     25px;\n    display:    flex;\n    max-width:  100%;\n    width:      100%;\n}\n.branchLine[data-v-0a1eea7e] {\n    height: 2px;\n    max-width:  100%;\n    width:      100%;\n}\nline[data-v-0a1eea7e] {\n    stroke:rgb(171, 192, 192);\n    stroke-width:2;\n    stroke-linecap: round;\n}\n.hover[data-v-0a1eea7e] {\n    border: black solid 3px;\n}\n\n", ""]);
 
 // exports
 
@@ -7007,7 +6915,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.skills_box[data-v-6f68392d] {\n    display: flex;\n    flex-wrap: nowrap;\n    flex-direction: column;\n    overflow: auto;\n    border: 2px solid orangered;\n    min-width: auto;\n    max-width: auto;\n}\n.skillpathPair[data-v-6f68392d] {\n    display: flex;\n    flex-direction: column;\n    align-items: stretch;\n}\n.pairContainer[data-v-6f68392d] {\n    width: -webkit-max-content;\n    width: -moz-max-content;\n    width: max-content;\n}\n", ""]);
+exports.push([module.i, "\n.skillTree[data-v-6f68392d] {\n    display: flex;\n    padding-top: 10px;\n    flex-direction: row;\n    overflow-x: auto;\n    max-width: inherit;\n}\n.selected[data-v-6f68392d] {\n    background: #00ac95;\n}\n.default[data-v-6f68392d] {\n    background: #212529;\n    color: white;\n}\n\n\n", ""]);
 
 // exports
 
@@ -38847,7 +38755,7 @@ var render = function() {
     "div",
     { staticClass: "skillCont" },
     [
-      _vm.skill.parent_skills != "base"
+      _vm.skill.parents != "base"
         ? _c("svg", { staticClass: "svg" }, [
             _c("line", {
               attrs: { x1: 50 + "%", y1: 0 + "%", x2: 50 + "%", y2: 100 + "%" }
@@ -38856,7 +38764,7 @@ var render = function() {
         : _vm._e(),
       _vm._v(" "),
       _c("img", {
-        attrs: { src: _vm.skill.skill_image },
+        attrs: { src: _vm.skill.image },
         on: {
           mouseover: function($event) {
             return _vm.SkillDetailsModalUp()
@@ -38864,7 +38772,7 @@ var render = function() {
         }
       }),
       _vm._v(" "),
-      _vm.skill.child_skills.length
+      _vm.skill.children.length
         ? _c("svg", { staticClass: "svg" }, [
             _c("line", {
               attrs: { x1: 50 + "%", y1: 0 + "%", x2: 50 + "%", y2: 100 + "%" }
@@ -38872,7 +38780,7 @@ var render = function() {
           ])
         : _vm._e(),
       _vm._v(" "),
-      _vm.skill.child_skills.length > 1
+      _vm.skill.children.length > 1
         ? _c("svg", { staticClass: "branchLine" }, [
             _c("line", {
               attrs: {
@@ -38885,8 +38793,8 @@ var render = function() {
           ])
         : _vm._e(),
       _vm._v(" "),
-      _vm.skill.child_skills.length
-        ? _c("skill-level", { attrs: { skills: _vm.skill.child_skills } })
+      _vm.skill.children.length
+        ? _c("skill-level", { attrs: { skills: _vm.skill.children } })
         : _vm._e(),
       _vm._v(" "),
       _vm.showSkillDetails
@@ -38910,14 +38818,14 @@ var render = function() {
                   _c("img", {
                     staticClass: "modalImage",
                     attrs: {
-                      src: _vm.skill.skill_image,
+                      src: _vm.skill.image,
                       "data-toggle": "tooltip",
                       "data-placement": "bottom",
                       title: "Show full topics tree"
                     },
                     on: {
                       click: function($event) {
-                        return _vm.showTopicTree()
+                        return _vm.subjectView()
                       }
                     }
                   }),
@@ -38925,11 +38833,11 @@ var render = function() {
                   _c(
                     "div",
                     { style: { fontSize: "50px", textAlign: "center" } },
-                    [_vm._v(_vm._s(_vm.skill.skill_name))]
+                    [_vm._v(_vm._s(_vm.skill.title))]
                   ),
                   _vm._v(" "),
                   _c("div", { style: { overflowY: "auto", padding: "10px" } }, [
-                    _vm._v(_vm._s(_vm.skill.skill_description))
+                    _vm._v(_vm._s(_vm.skill.description))
                   ])
                 ]),
                 _vm._v(" "),
@@ -39022,11 +38930,11 @@ var render = function() {
                         staticClass: "d-flex flex-row",
                         style: { border: "1px solid green", overflowY: "auto" }
                       },
-                      _vm._l(_vm.skill.child_skills, function(child) {
+                      _vm._l(_vm.skill.children, function(child) {
                         return _c("img", {
                           key: child.id,
                           staticClass: "m-1",
-                          attrs: { src: child.skill_image }
+                          attrs: { src: child.image }
                         })
                       }),
                       0
@@ -39074,7 +38982,7 @@ var render = function() {
         })
       }),
       _vm._v(" "),
-      _vm.skills.child_skills ? _c("skill-path") : _vm._e()
+      _vm.skills.children ? _c("skill-path") : _vm._e()
     ],
     2
   )
@@ -39130,31 +39038,97 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _vm._m(0),
-    _vm._v(" "),
-    _vm._m(1),
-    _vm._v(" "),
-    _c("div", { staticClass: "skills_box" }, [
-      _c(
-        "div",
-        { staticClass: "pairContainer" },
-        _vm._l(_vm.gensPerLevel, function(gens, index) {
-          return _c(
+    _vm.view === "skill"
+      ? _c("div", { staticClass: "skillTreeCont" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c("div", { staticClass: "row" }, [
+            _c(
+              "div",
+              {
+                staticClass: "col-6 mb-2 skillTreeHoverEffect",
+                class: [
+                  { stHover: _vm.stHoverBase },
+                  _vm.skillView === "base" ? "selected" : "default"
+                ],
+                on: {
+                  click: function($event) {
+                    _vm.skillView = "base"
+                  },
+                  mouseover: function($event) {
+                    return _vm.hoverBase()
+                  },
+                  mouseleave: function($event) {
+                    return _vm.hoverBase()
+                  }
+                }
+              },
+              [_vm._v("\n                Base Skills\n            ")]
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "col-6 mb-2 skillTreeHoverEffect",
+                class: [
+                  { stHover: _vm.stHoverAux },
+                  _vm.skillView === "aux" ? "selected" : "default"
+                ],
+                on: {
+                  click: function($event) {
+                    _vm.skillView = "aux"
+                  },
+                  mouseover: function($event) {
+                    return _vm.hoverAux()
+                  },
+                  mouseleave: function($event) {
+                    return _vm.hoverAux()
+                  }
+                }
+              },
+              [_vm._v("\n                Auxiliary Skills\n            ")]
+            )
+          ]),
+          _vm._v(" "),
+          _c(
             "div",
-            { key: index, staticClass: "skillpathPair" },
-            [
-              _c("skill-level", { attrs: { skills: gens } }),
-              _vm._v(" "),
-              _c("skill-path", {
-                attrs: { parent: gens, child: _vm.gensPerLevel[index + 1] }
-              })
-            ],
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.skillView === "base",
+                  expression: "skillView === 'base'"
+                }
+              ],
+              staticClass: "skillTree"
+            },
+            [_c("skill-level", { attrs: { skills: _vm.skillsDetails } })],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.skillView === "aux",
+                  expression: "skillView === 'aux'"
+                }
+              ],
+              staticClass: "skillTree"
+            },
+            [_c("skill-level", { attrs: { skills: _vm.aux } })],
             1
           )
-        }),
-        0
-      )
-    ])
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.view === "subject"
+      ? _c("div", [_vm._v("\n        SUBJECFT View\n    ")])
+      : _vm._e()
   ])
 }
 var staticRenderFns = [
@@ -39163,24 +39137,34 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "row" }, [
-      _c("h1", { staticClass: "col-12 myr" }, [_vm._v("Skill Tree")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-6 bg-primary mb-2" }, [
-        _vm._v("Base Skills")
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-6 bg-secondary mb-2" }, [
-        _vm._v("Auxiliary Skills")
-      ])
+      _c("h1", { staticClass: "col-12 header" }, [_vm._v("Skill Tree")])
     ])
   }
 ]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/skills/SubjectTree.vue?vue&type=template&id=010daf88&":
+/*!*********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/skills/SubjectTree.vue?vue&type=template&id=010daf88& ***!
+  \*********************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [_vm._v("\n    TEST\n")])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -51348,9 +51332,12 @@ module.exports = function(module) {
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
   \*****************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: bus */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bus", function() { return bus; });
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -51373,12 +51360,14 @@ Vue.component('skill-tree', __webpack_require__(/*! ./components/skills/SkillTre
 Vue.component('skill-level', __webpack_require__(/*! ./components/skills/SkillLevel.vue */ "./resources/js/components/skills/SkillLevel.vue")["default"]);
 Vue.component('skill-cont', __webpack_require__(/*! ./components/skills/SkillCont.vue */ "./resources/js/components/skills/SkillCont.vue")["default"]);
 Vue.component('skill-path', __webpack_require__(/*! ./components/skills/SkillPath.vue */ "./resources/js/components/skills/SkillPath.vue")["default"]);
+Vue.component('subject-tree', __webpack_require__(/*! ./components/skills/SubjectTree.vue */ "./resources/js/components/skills/SubjectTree.vue")["default"]);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+var bus = new Vue();
 var app = new Vue({
   el: '#app'
 });
@@ -51773,6 +51762,59 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SkillTree_vue_vue_type_template_id_6f68392d_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SkillTree_vue_vue_type_template_id_6f68392d_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/skills/SubjectTree.vue":
+/*!********************************************************!*\
+  !*** ./resources/js/components/skills/SubjectTree.vue ***!
+  \********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _SubjectTree_vue_vue_type_template_id_010daf88___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SubjectTree.vue?vue&type=template&id=010daf88& */ "./resources/js/components/skills/SubjectTree.vue?vue&type=template&id=010daf88&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+var script = {}
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__["default"])(
+  script,
+  _SubjectTree_vue_vue_type_template_id_010daf88___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _SubjectTree_vue_vue_type_template_id_010daf88___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/skills/SubjectTree.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/skills/SubjectTree.vue?vue&type=template&id=010daf88&":
+/*!***************************************************************************************!*\
+  !*** ./resources/js/components/skills/SubjectTree.vue?vue&type=template&id=010daf88& ***!
+  \***************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SubjectTree_vue_vue_type_template_id_010daf88___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./SubjectTree.vue?vue&type=template&id=010daf88& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/skills/SubjectTree.vue?vue&type=template&id=010daf88&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SubjectTree_vue_vue_type_template_id_010daf88___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SubjectTree_vue_vue_type_template_id_010daf88___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

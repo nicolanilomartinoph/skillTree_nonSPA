@@ -1,28 +1,28 @@
 <template>
     <div class="skillCont">
         <!-- The skill image and lines -->
-        <svg class="svg" v-if="skill.parent_skills != 'base'">
+        <svg class="svg" v-if="skill.parents != 'base'">
             <line 
                 :x1="50 + '%'" :y1="0 + '%'"
                 :x2="50 + '%'" :y2="100 + '%'"
             />
         </svg>
-        <img :src="skill.skill_image" @mouseover="SkillDetailsModalUp()" />
-        <svg class="svg" v-if="skill.child_skills.length">
+        <img :src="skill.image" @mouseover="SkillDetailsModalUp()">
+        <svg class="svg" v-if="skill.children.length">
             <line 
                 :x1="50 + '%'" :y1="0 + '%'"
                 :x2="50 + '%'" :y2="100 + '%'"
             />
         </svg>
-        <svg class="branchLine" v-if="skill.child_skills.length > 1">
+        <svg class="branchLine" v-if="skill.children.length > 1">
             <line 
                 :x1="branch[0] + '%'" :y1="1"
                 :x2="branch[1] + '%'" :y2="1"
             />
         </svg>
         <skill-level 
-            v-if="skill.child_skills.length"
-            :skills="skill.child_skills"
+            v-if="skill.children.length"
+            :skills="skill.children"
         />
 
         <!-- MODAL -->
@@ -30,12 +30,12 @@
             <div class="skillDetailsModal p-2 rounded">	
                 <!-- LEFT COLUMN -->	
                 <div>
-                    <img :src="skill.skill_image" class="modalImage" 
+                    <img :src="skill.image" class="modalImage" 
                         data-toggle="tooltip" data-placement="bottom" title="Show full topics tree"
-                        @click="showTopicTree()"
+                        @click="subjectView()"
                     />
-                    <div :style="{fontSize: '50px', textAlign: 'center'}">{{ skill.skill_name }}</div>
-                    <div :style="{overflowY: 'auto', padding: '10px'}">{{ skill.skill_description }}</div>
+                    <div :style="{fontSize: '50px', textAlign: 'center'}">{{ skill.title }}</div>
+                    <div :style="{overflowY: 'auto', padding: '10px'}">{{ skill.description }}</div>
                 </div>
                 <!-- RIGHT COLUMN -->
                 <div class="pl-2 ml-2 d-flex flex-column">
@@ -60,7 +60,7 @@
                     <div class="subSkillColCont">
                         <div class="modalHeader">Sub-skills</div>
                         <div class="d-flex flex-row" :style="{border: '1px solid green', overflowY: 'auto'}">  
-                            <img class="m-1" v-for="child in skill.child_skills" :key="child.id" :src="child.skill_image" />
+                            <img class="m-1" v-for="child in skill.children" :key="child.id" :src="child.image" />
                         </div>
                     </div>
                 </div>
@@ -195,9 +195,11 @@ line {
 .hover {
     border: black solid 3px;
 }
+
 </style>
 
 <script>
+import {bus} from '/var/www/html/skillTree_nonSPA/resources/js/app.js'
 export default {
     props: ['skill','siblings'],
     data() {
@@ -209,11 +211,11 @@ export default {
     },
     computed: {
         branch: function() {
-            if(this.skill.child_skills.length > 0) {
-                let fractions = 100 / this.skill.child_skills.length
+            if(this.skill.children.length > 0) {
+                let fractions = 100 / this.skill.children.length
                 let offsetFraction = fractions / 2
                 let branchStart = offsetFraction
-                let branchEnd = branchStart + (fractions * (this.skill.child_skills.length - 1))
+                let branchEnd = branchStart + (fractions * (this.skill.children.length - 1))
                 let x = [branchStart,branchEnd]
                 return x
             }else{
@@ -224,17 +226,18 @@ export default {
     methods: {
         SkillDetailsModalUp: function() {
             this.showSkillDetails = true
-            console.log("UP")
         },
         SkillDetailsModalDown: function() {
             this.showSkillDetails = false
-            console.log("DOWN")
         },
         showTopicTree: function() {
             this.click = true
         },
         hoverToggle: function(x) {
-            this.hover = !this.hover;
+            this.hover = !this.hover
+        },
+        subjectView() {
+            bus.$emit('subject-view','testdata')
         }
     }
 }

@@ -17,10 +17,10 @@ class JobsSeeder extends Seeder
         foreach($jobs as $key => $job)
         {
             DB::table('jobs')->insert([
-                'job_name' => $key,
-                'job_description' => $job->job_description,
-                'base_skills' => json_encode($job->base_skills),
-                'job_image' => file_get_contents(storage_path($job->job_image)),
+                'title' => $key,
+                'description' => $job->description,
+                'base' => json_encode($job->base),
+                'image' => file_get_contents(storage_path($job->image)),
                 'aux' => json_encode($job->aux)
             ]);
         }  
