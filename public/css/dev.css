@@ -11,6 +11,31 @@
     height: 100px;
 }
 
+img {
+    background: white;
+    padding: 2%;
+}
+
+.pageLevelComponent {
+    height: 100vh;
+}
+
+.contentDetails {
+    background: grey;
+    padding: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.contentName {
+    margin-bottom: 10px;    
+    word-wrap: break-word;
+}
+
+.contentDesc {
+    word-wrap: break-word;
+}
+
 .header {
     margin-top: 5px;
     margin-bottom: 5px;
@@ -32,3 +57,21 @@ body {
 .stHover {
     filter: contrast(200%);
 }
+
+.selected {
+    background: #00ac95;
+}
+
+.default {
+    background: #212529;
+    color: white;
+}
+
+.topic:hover {
+    border: solid whitesmoke 2px;
+}
+
+.topicsContTheme {
+    background: #00ac95;
+}
+

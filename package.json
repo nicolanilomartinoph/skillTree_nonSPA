@@ -25,6 +25,7 @@
     "vue-template-compiler": "^2.6.10"
   },
   "dependencies": {
-    "vuex": "^3.3.0"
+    "vuex": "^3.3.0",
+    "vuex-persistedstate": "^3.0.1"
   }
 }

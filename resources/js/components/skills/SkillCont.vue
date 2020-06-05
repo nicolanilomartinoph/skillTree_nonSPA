@@ -32,7 +32,7 @@
                 <div>
                     <img :src="skill.image" class="modalImage" 
                         data-toggle="tooltip" data-placement="bottom" title="Show full topics tree"
-                        @click="subjectView()"
+                        @click="skillSubjectToggler()"
                     />
                     <div :style="{fontSize: '50px', textAlign: 'center'}">{{ skill.title }}</div>
                     <div :style="{overflowY: 'auto', padding: '10px'}">{{ skill.description }}</div>
@@ -40,7 +40,7 @@
                 <!-- RIGHT COLUMN -->
                 <div class="pl-2 ml-2 d-flex flex-column">
                     <!-- TOPIC COLUMN -->
-                    <div class="topicColCont">
+                    <div class="topicColCont topicsContTheme">
                         <div class="modalHeader" :style="{display: 'flex', flexDirection: 'row'}">
                             <div>Topics</div>
                             <div class="ml-3">
@@ -52,14 +52,14 @@
                         </div>
                         <div class="topicsCont">
                             <div class="topic m-1 p-2" v-for="subject in skill.subjects" :key="subject.skill_id + ' - ' + subject.id">
-                                {{subject.subject_title}}
+                                {{subject.title}}
                             </div>
                         </div>
                     </div>
                     <!-- SUB-SKILL COLUMN -->
                     <div class="subSkillColCont">
                         <div class="modalHeader">Sub-skills</div>
-                        <div class="d-flex flex-row" :style="{border: '1px solid green', overflowY: 'auto'}">  
+                        <div class="d-flex flex-row" :style="{overflowY: 'auto'}">  
                             <img class="m-1" v-for="child in skill.children" :key="child.id" :src="child.image" />
                         </div>
                     </div>
@@ -81,7 +81,6 @@
 .topicColCont {
     display: flex;
     flex-direction: column;
-    background: #00ac95;
 }
 
 .topicsCont {
@@ -89,8 +88,8 @@
     flex-direction: row;
     max-height: 330px;
     min-height: 330px;
-    border: 1px solid green;
     overflow-y: auto;
+    box-sizing: border-box;
 }
 
 .topic {
@@ -224,20 +223,20 @@ export default {
         }
     },
     methods: {
-        SkillDetailsModalUp: function() {
+        SkillDetailsModalUp() {
             this.showSkillDetails = true
         },
-        SkillDetailsModalDown: function() {
+        SkillDetailsModalDown() {
             this.showSkillDetails = false
         },
-        showTopicTree: function() {
+        showTopicTree() {
             this.click = true
         },
-        hoverToggle: function(x) {
+        hoverToggle(x) {
             this.hover = !this.hover
         },
-        subjectView() {
-            bus.$emit('subject-view','testdata')
+        skillSubjectToggler() {
+            this.$store.commit('skillSubjectToggler', this.skill)
         }
     }
 }

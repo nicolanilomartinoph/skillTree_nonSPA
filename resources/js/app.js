@@ -19,11 +19,13 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('skill-tree', require('./components/skills/SkillTree.vue').default);
+Vue.component('skill-page', require('./components/skills/SkillPage.vue').default);
 Vue.component('skill-level', require('./components/skills/SkillLevel.vue').default);
 Vue.component('skill-cont', require('./components/skills/SkillCont.vue').default);
 Vue.component('skill-path', require('./components/skills/SkillPath.vue').default);
-Vue.component('subject-tree', require('./components/skills/SubjectTree.vue').default);
+Vue.component('subject-page', require('./components/skills/SubjectPage.vue').default);
+Vue.component('subject-list', require('./components/skills/SubjectList.vue').default);
+Vue.component('subject-cont', require('./components/skills/SubjectCont.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -31,8 +33,11 @@ Vue.component('subject-tree', require('./components/skills/SubjectTree.vue').def
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 export const bus = new Vue();
+import {store} from './store'
+
 const app = new Vue({
     el: '#app',
+    store,
 });
 
 

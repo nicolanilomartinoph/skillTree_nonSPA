@@ -1,0 +1,39 @@
+{
+    "0": {
+        "skill_id": 1,
+        
+        "title": "HTML Basics 1",
+        "description": "First thing about HTML is bla bla blah",
+        "video": "url",
+        "site" : "url"
+    },
+    "1": {
+        "skill_id": 1,
+        "title": "HTML Basics 2",
+        "description": "First thing about HTML is bla bla blah",
+        "video": "url",
+        "site" : "url"
+    },
+    "2": {
+        "skill_id": 1,
+        "title": "HTML Basics 3",
+        "description": "First thing about HTML is bla bla blah",
+        "video": "url",
+        "site" : "url"
+    },
+    "3": {
+        "skill_id": 1,
+        "title": "HTML Basics 4",
+        "description": "First thing about HTML is bla bla blah",
+        "video": "url",
+        "site" : "url"
+    },
+    "4": {
+        "skill_id": 1,
+        "title": "HTML Basics 5",
+        "description": "First thing about HTML is bla bla blah",
+        "video": "url",
+        "site" : "url"
+    }
+
+}

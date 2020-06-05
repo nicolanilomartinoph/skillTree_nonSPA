@@ -18,6 +18,8 @@ class CreateSubjectsTable extends Migration
             $table->unsignedBigInteger('skill_id');
             $table->string('title');
             $table->longtext('description');
+            $table->char('video')->nullable();
+            $table->char('site')->nullable();
 
             $table->foreign('skill_id')->references('id')->on('skills');
         });

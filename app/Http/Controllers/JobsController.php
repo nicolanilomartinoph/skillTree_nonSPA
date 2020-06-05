@@ -51,16 +51,13 @@ class JobsController extends Controller
      */
     public function show(job $job)
     {
+        $job['image'] = 'data:image/png;base64,'.base64_encode($job['image']);
         $job['base'] = json_decode($job['base']);
         $job['aux'] = json_decode($job['aux']);
         $job['base'] = skill_unpacker($job['base']);
         $job['aux'] = skill_unpacker($job['aux']);
         
-        return view('jobDetail', [
-            'details' => $job,
-            'base' => $job['base'],
-            'aux' => $job['aux']
-        ]);
+        return view('jobDetail', ['job' => $job->toJson()]);
     }
 
     /**
