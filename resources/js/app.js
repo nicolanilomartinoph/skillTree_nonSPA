@@ -23,9 +23,12 @@ Vue.component('skill-page', require('./components/skills/SkillPage.vue').default
 Vue.component('skill-level', require('./components/skills/SkillLevel.vue').default);
 Vue.component('skill-cont', require('./components/skills/SkillCont.vue').default);
 Vue.component('skill-path', require('./components/skills/SkillPath.vue').default);
+
 Vue.component('subject-page', require('./components/skills/SubjectPage.vue').default);
 Vue.component('subject-list', require('./components/skills/SubjectList.vue').default);
 Vue.component('subject-cont', require('./components/skills/SubjectCont.vue').default);
+
+Vue.component('character-page', require('./components/skills/CharacterPage.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

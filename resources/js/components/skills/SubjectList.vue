@@ -26,7 +26,7 @@
     width: 96%;
     margin-top: 5px;
     margin-bottom: 5px;
-    line-height: 50px;
+    line-height: 45px;
     font-weight: 900;
     box-sizing: border-box;
 }
@@ -44,9 +44,15 @@
 .playIcon {
     font-size: 50px;
 }
+.playIcon:hover {
+    color: gray;
+}
 
 .linkIcon {
     font-size: 50px;
+}
+.linkIcon:hover {
+    color: gray;
 }
 </style>
 

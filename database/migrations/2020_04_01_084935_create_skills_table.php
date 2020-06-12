@@ -23,7 +23,7 @@ class CreateSkillsTable extends Migration
             //$table->binary('skill_image')->nullable();    Because MEDIUMBLOB is not supported
             
         });
-        DB::statement("ALTER TABLE skills ADD image MEDIUMBLOB");
+        DB::statement("ALTER TABLE skills ADD image MEDIUMBLOB"); // Migrating MEDIUMBLOB
     }
 
     /**

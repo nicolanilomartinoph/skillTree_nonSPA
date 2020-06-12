@@ -67,7 +67,7 @@
         </style>
     </head>
     <body>
-        <div class="flex-center position-ref full-height">
+        <div class="container flex-center position-ref full-height">
             @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
@@ -82,18 +82,17 @@
                 </div>
             @endif
             <div class="container">
-                <nav class="navbar">
-                    <a href="#" class="navbar-brand txt mr-auto">Skill Tree</a>
-                    <a href="/skills" class="navbar-nav mr-auto">Skills</a>
-                    <a href="/jobs" class="navbar-nav mr-auto">Jobs</a>
-                    <a href="/about" class="navbar-nav mr-auto">About</a>
+                <nav class="navbar text-center">
+                    <a href="/skills" class="navbar-nav ml-5">Skills</a>
+                    <a href="/jobs" class="navbar-nav ">Jobs</a>
+                    <a href="/about" class="navbar-nav mr-5">About</a>
                 </nav>
                 <div class="content">
-                    <div class="title m-b-md">
+                    <div class="title m-b-md mt-5">
                         Skill Tree
                     </div>
                     <div class="mx-4 txt">
-                        See the path before even taking it. Check job skill requirements and end points you can take with skill Tree.
+                        See the path before even taking it. Check job skill requirements and end-points you can take with skill Tree.
                     </div>
                 </div>
             </div>

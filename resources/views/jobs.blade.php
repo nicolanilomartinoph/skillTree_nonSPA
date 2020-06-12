@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
+    <div class="container pageLevelComponent">
         <div class="row">
             <div class="col-12 text-center bg-success">
                 Search Job
