@@ -29,6 +29,12 @@ Vue.component('subject-list', require('./components/skills/SubjectList.vue').def
 Vue.component('subject-cont', require('./components/skills/SubjectCont.vue').default);
 
 Vue.component('character-page', require('./components/skills/CharacterPage.vue').default);
+Vue.component('job-selector', require('./components/job/JobGrid.vue').default);
+
+/**
+ * MINOR COMPONENTS
+ */
+Vue.component('plus-button', require('./components/minorComponents/PlusButton.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

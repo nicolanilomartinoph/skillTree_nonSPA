@@ -52,6 +52,12 @@
     </div>
 </template>
 
+<style>
+/**
+    This class is applied to the entire project for fade-in/out, z-index, etc.
+ */
+</style>
+
 <style scoped>
 .skillTree {
     display: flex;
