@@ -1,6 +1,6 @@
 <template>
     <transition name="jobSelector">
-        <div class="jobSelector bg-success">
+        <div class="jobSelector">
             <JobGrid />
         </div>
     </transition>

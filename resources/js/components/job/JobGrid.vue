@@ -24,18 +24,19 @@
 <script>
 import JobCell from './JobCell'
 
-
-//console.log(props)
-
 export default {
     data() {
         return {
-            jobs: this.$store.state.job.jobs
+            jobs: this.$store.state.job.availableJobs
         }
     },
     computed: {
+        /**
+         * This only prevents scroll bar from showing briefly during expansion/minimizing, no intented feature
+         */
         jobGridCSS() {
-            let aChildIsExpanded = this.$store.state.job.expanded === null? false : true
+            let aChildIsExpanded = this.$store.state.job.selectedJob === null? false : true
+
             return {
                 overflow: aChildIsExpanded? 'hidden' : 'auto'
             }

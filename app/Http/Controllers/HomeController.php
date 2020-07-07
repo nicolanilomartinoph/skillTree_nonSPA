@@ -25,6 +25,7 @@ class HomeController extends Controller
     public function index()
     {
         $user = Auth::user();
+        $user['userJobs'] = Auth::user()->userJob();
         
         return view('home', ['char' => $user]);
     }

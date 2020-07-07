@@ -1,59 +1,12 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import state from './state'
 import createPersistedState from 'vuex-persistedstate';
 
 Vue.use(Vuex)
 
 export const store = new Vuex.Store({
-    state: {
-        skillView: true,
-        skill: null,
-        view: {
-            name: 'home',
-            payload: null
-        },
-        job: {
-            jobSelectorCSS: null,
-            expanded: {
-                id: null
-            },
-            // For testing only
-            jobs: [
-                {
-                    title: "job1",
-                    id: 1
-                },
-                {
-                    title: "job2",
-                    id: 2
-                },
-                {
-                    title: "job3",
-                    id: 3
-                },
-                {
-                    title: "job4",
-                    id: 4
-                },
-                {
-                    title: "job5",
-                    id: 5
-                },
-                {
-                    title: "job6",
-                    id: 6
-                },
-                {
-                    title: "job7",
-                    id: 7
-                },
-                {
-                    title: "job8",
-                    id: 8
-                }
-            ]
-        }
-    },
+    state,
     plugins: [createPersistedState()],
     mutations: {
         /**
@@ -61,7 +14,7 @@ export const store = new Vuex.Store({
          */
         skillSubjectToggler(state, n) {
             if(n) state.skill = n
-            state.skillView = !state.skillView 
+            state.skillView = !state.skillView
         },
         viewState(state, n) {
             state.view.name = n
@@ -72,8 +25,22 @@ export const store = new Vuex.Store({
         getGridCSS(state, n) {
             state.job.jobSelectorCSS = n
         },
-        hasExpanded(state, n) {
-            state.job.expanded = n
+        jobSelected(state, n) {
+            state.job.selectedJob = n
+        },
+        addAvailableJobs(state, n) {
+            state.job.availableJobs = n
+        }
+    },
+    actions: {
+        getDBJobs({commit}){
+            axios.get('/api/selectJobs')
+            .then(res => {
+                commit('addAvailableJobs', res.data)
+            })
+            .catch(err => {
+                console.log(err)
+            })
         }
     }
 })

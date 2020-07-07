@@ -28,7 +28,10 @@ Vue.component('subject-page', require('./components/skills/SubjectPage.vue').def
 Vue.component('subject-list', require('./components/skills/SubjectList.vue').default);
 Vue.component('subject-cont', require('./components/skills/SubjectCont.vue').default);
 
-Vue.component('character-page', require('./components/skills/CharacterPage.vue').default);
+/**
+ * Home Page components
+ */
+Vue.component('character-page', require('./components/home/CharacterPage.vue').default);
 Vue.component('job-selector', require('./components/job/JobGrid.vue').default);
 
 /**

@@ -20,6 +20,10 @@
     font-size: 30px;
     bottom: 1px;
 }
+    
+.sign:hover{
+    cursor: pointer;
+}
 
 .iconCont:hover {
     background: rgb(160, 140, 140);
