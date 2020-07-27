@@ -1,14 +1,19 @@
 <template>
     <span class="material-icons iconCont iconDeviatedCSS">
-        add
+        arrow_back
     </span>
 </template>
 
 <style scoped>
 .iconDeviatedCSS {
-    font-size: 32px;
     width: 34px;
     height: 34px;
 }
 
 </style>
+
+<script>
+export default {
+    
+}
+</script>

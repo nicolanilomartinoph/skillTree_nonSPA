@@ -48,6 +48,27 @@ img {
     border: gray 5px solid;
 }
 
+.iconCont {
+    border-radius: 100%;
+    background: grey;
+    text-align: center;
+    width: 32px;
+    height: 32px;
+    justify-content: center;
+    justify-items: center;
+    border: white solid 1px;
+}
+
+.icon {
+    align-self: center;
+    justify-self: center;
+}
+
+.iconCont:hover{
+    cursor: pointer;
+    background: lightgrey;
+}
+
 body {
     background-image: url('https://ak.picdn.net/shutterstock/videos/1013215220/thumb/1.jpg');
     background-repeat: no-repeat;

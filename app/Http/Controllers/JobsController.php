@@ -21,7 +21,7 @@ class JobsController extends Controller
     public function index()
     {
         // This displays the available jobs
-        $jobs = DB::table('jobs')->select('title', 'description')->get();
+        $jobs = DB::table('jobs')->select('id','title', 'description')->get();
 
         return json_encode($jobs);
     }

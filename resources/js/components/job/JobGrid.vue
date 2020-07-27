@@ -27,7 +27,7 @@ import JobCell from './JobCell'
 export default {
     data() {
         return {
-            jobs: this.$store.state.job.availableJobs
+            jobs: this.$store.state.job.availableJobs   
         }
     },
     computed: {
@@ -44,6 +44,9 @@ export default {
     },
     components: {
         'job-cell': JobCell
+    },
+    created() {
+        this.$store.commit('jobSelected', null)
     },
     mounted() {
         let parent = document.getElementById('jobGrid')

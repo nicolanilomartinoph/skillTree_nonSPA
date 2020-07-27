@@ -17,7 +17,7 @@ class CreateUserJobsTable extends Migration
             $table->primary(['user_id', 'job_id']);
             $table->unsignedBigInteger('job_id');
             $table->unsignedBigInteger('user_id');
-            $table->float('completion', 8, 2);
+            $table->float('completion', 8, 2)->default(0);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');

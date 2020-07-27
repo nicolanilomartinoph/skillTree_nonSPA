@@ -13,10 +13,5 @@ class Job extends Model
      */
     protected $fillable = [
         'job_name','job_description','base_skills','job_image',
-    ];
-
-    // public function getRouteKeyName()
-    // {
-    //     return 'job_id';
-    // }   
+    ];  
 }

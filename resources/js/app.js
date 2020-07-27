@@ -8,6 +8,7 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -38,6 +39,8 @@ Vue.component('job-selector', require('./components/job/JobGrid.vue').default);
  * MINOR COMPONENTS
  */
 Vue.component('plus-button', require('./components/minorComponents/PlusButton.vue').default);
+Vue.component('back-arrow-button', require('./components/minorComponents/BackArrowButton.vue').default);
+Vue.component('scale-font-size', require('./components/minorComponents/ScaleFontSize.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

@@ -17,8 +17,12 @@ class CreateUserSubjectsTable extends Migration
             $table->primary(['user_id', 'subject_id']);
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('subject_id');
-            $table->timestamps('started', 0);
-            $table->timestamps('completed', 0);
+            //$table->timestamps('started', 0);
+            //$table->timestamps('completed', 0);
+            /**
+             * I dont know why TIMESTAMPS causes MySQL error when migrating but removing it for now, 
+             * uncomment it soon as subject needs these data
+             */
 
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('subject_id')->references('id')->on('subjects');

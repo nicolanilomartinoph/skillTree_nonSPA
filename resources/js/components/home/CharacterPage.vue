@@ -10,9 +10,9 @@
                 </div>
             </div>
         </transition>
-        <div class="absoluteCont jobChangerCont" :style="jobChangerCont">
-            <job-changer @click.native="addJob"/> <!-- is the button that shows EquipedJobs and AddJob button -->
-        </div>
+        <div class="absoluteCont jobChangerCont centerContent" :style="jobChangerCont">
+            <job-changer />
+        </div> 
         <transition name="jobSelector">
             <job-selector v-if="view === 'jobSelector'" />
         </transition>
@@ -27,7 +27,7 @@
 
 .jobChangerCont {
     top: 70%;
-    transition: top .5s;
+    transition: ease-in-out top .5s;
     z-index: 3;
 }
 
@@ -109,28 +109,18 @@ export default {
         }
     },
     computed: {
-        view: function() {
-            return this.$store.state.view.name
-        },
-        jobChangerCont() {
-            return {top: this.view === 'home' ? '70%' : '90%'}
-        }
-    },
-    methods: {
-        addJob() {
-            if(this.view === 'home') {
-                this.$store.commit('viewState', 'jobSelector')
-            } else {
-                this.$store.commit('viewState', 'home')
-            }
-        },
+        view: function() { return this.$store.state.view.name },
+        jobChangerCont() { return { top: this.view === 'home' ? '70%' : '90%', }},
+        charName() { return this.$store.user.id },
+        charImage() { return this.$store.user.image },
+        charJobs() { return this.$store.user.jobs }
     },
     components: {
         'job-selector' : jobSelector,
         'job-changer' : jobChanger
     },
     created() {
-        this.$store.state.job.equipedJobs.push = this.user.userJobs
+        this.$store.commit('setUserData', this.user)
         if(this.view === 'home') {
             this.$store.commit('viewState', 'home')
         }   

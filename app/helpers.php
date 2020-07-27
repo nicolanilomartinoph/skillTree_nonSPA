@@ -46,3 +46,7 @@ function skill_unpacker($skill, $recursive = true, &$parent_skills = null)
     
     return $skill;
 }
+
+function getUserEquipedJobs() {
+    return \Auth::user()->userJob()->get();
+}
