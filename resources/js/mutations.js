@@ -27,6 +27,9 @@ let mutations = {
     setUserDataEquipedJobs(state, n) {
         state.user.userJobs = n
     },
+    safeToExpand(state, n) {
+        state.job.safeToExpand = n
+    }
 }
 
 export default mutations

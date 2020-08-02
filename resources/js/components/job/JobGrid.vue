@@ -1,6 +1,6 @@
 <template>
-    <div class="jobGrid" id="jobGrid" :style="jobGridCSS">
-        <job-cell v-for="job in jobs" :key="job.id" :job="job" />
+    <div class="jobGrid" id="jobGrid" >
+        <job-cell v-for="(job, index) in jobs" :key="job.id" :job="job" :index="index"/>
     </div>
 </template>
 
@@ -11,6 +11,7 @@
     grid-template-rows: 25% 25% 25% 25% ;
     grid-column-gap: 5%;
     grid-row-gap: 3%;
+    overflow: hidden;
     
     margin: auto;
     margin-top: 2%;
@@ -30,27 +31,17 @@ export default {
             jobs: this.$store.state.job.availableJobs   
         }
     },
-    computed: {
-        /**
-         * This only prevents scroll bar from showing briefly during expansion/minimizing, no intented feature
-         */
-        jobGridCSS() {
-            let aChildIsExpanded = this.$store.state.job.selectedJob === null? false : true
-
-            return {
-                overflow: aChildIsExpanded? 'hidden' : 'auto'
-            }
-        }
-    },
     components: {
         'job-cell': JobCell
     },
     created() {
-        this.$store.commit('jobSelected', null)
+        //this.$store.commit('jobSelected', null)
     },
     mounted() {
         let parent = document.getElementById('jobGrid')
         this.$store.commit('getGridCSS', parent.getBoundingClientRect())
+        
+        //this.$store.commit('jobSelected', null)
     }
 }
 </script>
