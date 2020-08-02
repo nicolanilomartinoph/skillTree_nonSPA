@@ -2023,7 +2023,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     jobChangerCont: function jobChangerCont() {
       return {
-        top: this.view === 'home' ? '70%' : '90%'
+        top: this.view === this.$store.state.viewNames['HOME'] ? '70%' : '90%'
       };
     },
     charName: function charName() {
@@ -2042,10 +2042,12 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {
     this.$store.commit('setUserData', this.user);
-
-    if (this.view === 'home') {
-      this.$store.commit('viewState', 'home');
-    }
+    /**
+     * lets try removing this, this is supposed to resolve the refreshing problem
+    if(this.view === this.$store.state.viewNames['HOME']) {
+        this.$store.commit('viewState', this.$store.state.viewNames['HOME'])
+    }  
+     */
   }
 });
 
@@ -2061,10 +2063,6 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _JobEquipedCont_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./JobEquipedCont.vue */ "./resources/js/components/home/JobEquipedCont.vue");
-//
-//
-//
-//
 //
 //
 //
@@ -2312,7 +2310,7 @@ __webpack_require__.r(__webpack_exports__);
       return this.$store.state.view.name;
     },
     text: function text() {
-      return this.view === 'home' ? 'Add a job' : 'Select a job';
+      return this.view === this.$store.state.viewNames['HOME'] ? 'Add a job' : 'Select a job';
     },
 
     /**
@@ -2332,14 +2330,17 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       return false;
+    },
+    jobChangerWidth: function jobChangerWidth() {
+      if (this.selectedJob) return 0;else if (this.equipedJobs.length === 0) return 1;else if (this.equipedJobs.length > 0) return 2;
     }
   },
   methods: {
     addJob: function addJob() {
-      if (this.$store.state.view.name === 'home') {
-        this.$store.commit('viewState', 'jobSelector');
-      } else if (this.$store.state.view.name === 'jobSelector') {
-        this.$store.commit('viewState', 'home');
+      if (this.$store.state.view.name === this.$store.state.viewNames['HOME']) {
+        this.$store.commit('viewState', this.$store.state.viewNames['JOB_SELECTOR']);
+      } else if (this.$store.state.view.name === this.$store.state.viewNames['JOB_SELECTOR']) {
+        this.$store.commit('viewState', this.$store.state.viewNames['HOME']);
       }
     },
     addOrRemoveJob: function addOrRemoveJob() {
@@ -2358,6 +2359,7 @@ __webpack_require__.r(__webpack_exports__);
           return console.log(err);
         });
       } else {
+        confirm("Unequiping this job will delete all your progress. Are you sure you want to continue?");
         axios.post('/removeUserJob', {
           job: this.selectedJob.id
         }).then(function (res) {
@@ -2422,8 +2424,64 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['equipedJob']
+  props: ['equipedJob'],
+  methods: {
+    /**
+     * This method allows user to open a job among its equipedJobs instead of clicking a jobCell from the 
+     * jobGrid at the JOB_SELECTOR view
+     */
+    viewEquipedJob: function viewEquipedJob() {
+      /**
+       * If jobEquipedCont is clicked while $store.view.name = HOME
+       */
+      if (this.$store.state.view.name === this.$store.state.viewNames['HOME']) {
+        this.$store.commit('viewState', this.$store.state.viewNames['JOB_SELECTOR']);
+        /**
+         * This code is to resolve the issue where the job doesn't expand when clicked from the 
+         * jobEquipedCont component WHILE on $store.view.name = HOME
+         */
+
+        var selectedJob = this.findEquipedJob();
+        this.$store.commit('jobSelected', selectedJob);
+        console.log('i ran');
+        /**
+         * but if you resolve the issue where refreshing an expanded job causes faded jobCells but still clickable 
+         * it would be easier
+         */
+      }
+      /**
+       * If jobEquipedCont is clicked while $store.view.name = JOB_SELECTOR
+       */
+      else {
+          var _selectedJob = this.findEquipedJob();
+
+          this.$store.commit('jobSelected', _selectedJob);
+          console.log('i ran 2');
+        }
+    },
+
+    /**
+     * This FN finds and returns the selectedJob Obj among the available jobs
+     */
+    findEquipedJob: function findEquipedJob() {
+      var jobAvailable = this.$store.state.job.availableJobs;
+      var selectedJob = null; // Find the selected job among the availableJobs
+
+      for (var i = 0; i < jobAvailable.length; i++) {
+        if (jobAvailable[i].id === this.equipedJob.job_id) {
+          selectedJob = jobAvailable[i];
+          break;
+        }
+      }
+
+      return selectedJob;
+    }
+  }
 });
 
 /***/ }),
@@ -2714,16 +2772,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['job'],
+  props: ['job', 'index'],
   data: function data() {
     return {
-      expand: false,
-      expandCSS: {
-        zIndex: 1
-      },
       currentPos: null,
 
       /**
@@ -2791,40 +2843,46 @@ __webpack_require__.r(__webpack_exports__);
     gridCSS: function gridCSS() {
       return this.$store.state.job.jobSelectorCSS;
     },
+    safeToExpand: function safeToExpand() {
+      return this.$store.state.job.safeToExpand;
+    },
     IamExpanding: function IamExpanding() {
-      var selectedJob = this.$store.state.job.selectedJob;
-
-      if (selectedJob !== null) {
-        return selectedJob.id === this.job.id ? true : false;
-      } else {
-        return false;
-      }
+      if (this.$store.state.job.selectedJob !== null) return this.$store.state.job.selectedJob.id === this.job.id ? true : false;else return false;
     },
     someoneIsExpanding: function someoneIsExpanding() {
-      var selectedJob = this.$store.state.job.selectedJob;
-
-      if (selectedJob !== null) {
-        return selectedJob.id !== this.job.id && this.$store.state.job.selectedJob.id !== null ? true : false;
-      } else {
-        return false;
-      }
+      if (this.$store.state.job.selectedJob !== null) return this.$store.state.job.selectedJob.id !== this.job.id && this.$store.state.job.selectedJob.id !== null ? true : false;else return false;
     },
     noOneIsExpanding: function noOneIsExpanding() {
       return this.$store.state.job.selectedJob === null ? true : false;
-    }
-  },
-  methods: {
-    toggleJobSelected: function toggleJobSelected(e) {
-      var expand = {
-        position: 'relative',
-        left: "".concat(this.gridCSS.left - this.currentPos.left, "px"),
-        top: "".concat(this.gridCSS.top - this.currentPos.top, "px"),
-        width: "1000%",
-        height: "400%",
-        zIndex: 2 //don't remove, this prevents faded grid cells from getting clicked at the back of the expanded cell
+    },
+    expand: function expand() {
+      /**
+       * Since computed properties are calculate before mounted() is called, we need to return something
+       * to avoid "(error during evaluation)" error
+       */
+      if (this.currentPos === null) {
+        /**
+         * If getBoundingClientRect() is not yet ran, there will be no position info
+         */
+        return {};
+      } else {
+        /**
+         * When getBoundingClientRect() is ran, this.currentPos will be available to calculate
+         * now we know how to expand
+         */
+        return {
+          position: 'relative',
+          left: "".concat(this.gridCSS.left - this.currentPos.left, "px"),
+          top: "".concat(this.gridCSS.top - this.currentPos.top, "px"),
+          width: "1000%",
+          height: "400%",
+          zIndex: 2 //don't remove, this prevents faded grid cells from getting clicked at the back of the expanded cell
 
-      };
-      var notExpand = {
+        };
+      }
+    },
+    notExpand: function notExpand() {
+      return {
         position: 'relative',
         left: '0px',
         top: '0px',
@@ -2833,14 +2891,22 @@ __webpack_require__.r(__webpack_exports__);
         zIndex: 1 //don't remove, this prevents faded grid cells from getting clicked at the back of the expanded cell
 
       };
+    },
+    expandCSS: function expandCSS() {
+      if (this.IamExpanding && this.safeToExpand) return this.expand;else return this.notExpand;
+    }
+    /**
+     * after mounting, it will be calculated
+     * set safeToExpand to true
+     * 
+     */
 
-      if (!this.expand) {
-        this.expand = !this.expand;
-        this.expandCSS = expand;
+  },
+  methods: {
+    toggleJobSelected: function toggleJobSelected() {
+      if (!this.IamExpanding) {
         this.$store.commit('jobSelected', this.job);
       } else {
-        this.expand = !this.expand;
-        this.expandCSS = notExpand;
         this.$store.commit('jobSelected', null);
       }
     },
@@ -2863,7 +2929,17 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   mounted: function mounted() {
+    /**
+     * This will get the position on the screen of each job Cell
+     * These values are used to calculate the how and where should each job Cell expands when selected
+     */
     this.currentPos = this.$refs["template"].getBoundingClientRect();
+    this.$store.commit('safeToExpand', false);
+
+    if (this.index + 1 === this.$store.state.job.availableJobs.length) {
+      // all cells are displayed and getBoundingClientRect are known
+      this.$store.commit('safeToExpand', true);
+    }
   }
 });
 
@@ -2902,6 +2978,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2909,26 +2986,14 @@ __webpack_require__.r(__webpack_exports__);
       jobs: this.$store.state.job.availableJobs
     };
   },
-  computed: {
-    /**
-     * This only prevents scroll bar from showing briefly during expansion/minimizing, no intented feature
-     */
-    jobGridCSS: function jobGridCSS() {
-      var aChildIsExpanded = this.$store.state.job.selectedJob === null ? false : true;
-      return {
-        overflow: aChildIsExpanded ? 'hidden' : 'auto'
-      };
-    }
-  },
   components: {
     'job-cell': _JobCell__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
-  created: function created() {
-    this.$store.commit('jobSelected', null);
+  created: function created() {//this.$store.commit('jobSelected', null)
   },
   mounted: function mounted() {
     var parent = document.getElementById('jobGrid');
-    this.$store.commit('getGridCSS', parent.getBoundingClientRect());
+    this.$store.commit('getGridCSS', parent.getBoundingClientRect()); //this.$store.commit('jobSelected', null)
   }
 });
 
@@ -3046,6 +3111,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
 //
 //
 //
@@ -8281,7 +8347,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.jobChanger[data-v-a7ce4ccc] {\n    height: 50px;\n    background: grey;\n    border-radius: 30px;\n    margin: 0px auto 0px auto;\n    padding: 5px;\n}\n.jobChanger .AddOrRemoveJobCont[data-v-a7ce4ccc] {\n    height: 40px;\n}\n.addRemoveJobButton[data-v-a7ce4ccc] {\n    width: 100%;\n    height: 100%;\n    border-radius: 30px;\n    border: solid black 1px;\n    font-size: 25px;\n    text-align: center;\n}\n.remove[data-v-a7ce4ccc] {\n    background: red;\n    color: white;\n}\n.equip[data-v-a7ce4ccc] {\n    background: green;\n    color: white;\n}\n.addRemoveJobButton[data-v-a7ce4ccc]:active {\n    border: none;\n    outline: none;\n}\n.addRemoveJobButton[data-v-a7ce4ccc]:hover {\n    -webkit-filter: grayscale(50%);\n            filter: grayscale(50%);\n}\n.jobChanger .jobListCont[data-v-a7ce4ccc] {\n    position: relative;\n    display: flex;\n    height: 40px;\n    text-align: center;\n    border-radius: 30px;\n    margin: auto;\n}\n.jobCont[data-v-a7ce4ccc] {\n    width: 50px;\n}\n.textAndButtonCont[data-v-a7ce4ccc] {\n    display:flex;\n    width: -webkit-max-content;\n    width: -moz-max-content;\n    width: max-content;\n}\n.textAndButtonContNoJob[data-v-a7ce4ccc] {\n    margin: auto;\n}\n.textAndButtonContWithJob[data-v-a7ce4ccc] {\n    position: absolute;\n    right: 5px;\n}\n.textAndButtonCont .text[data-v-a7ce4ccc] {\n    margin: auto 5px auto 5px;\n    font-size: 20px;\n}\n.backArrowButton[data-v-a7ce4ccc] {\n    font-size: 32px;\n}\n.jobListCont .jobList[data-v-a7ce4ccc] {\n    display: flex;\n    flex-direction: row;\n    border-radius: 15px;\n    justify-content:space-evenly;\n}\n.jobListCont[data-v-a7ce4ccc]::-webkit-scrollbar {\n    height: 10px;\n    border-radius: 3px;\n}\n.jobListCont[data-v-a7ce4ccc]::-webkit-scrollbar-track {\n    background: transparent;\n}\n.jobListCont[data-v-a7ce4ccc]::-webkit-scrollbar-thumb {\n    background: grey;\n    border-radius: 5px;\n    border: 1px solid white;\n}\n@media only screen and (min-width: 500px) {\n.zeroJobsEquiped[data-v-a7ce4ccc] {\n        /* background: yellow; */\n        min-width: 50vw;\n        width: 50vw;\n}\n.nonZeroJobsEquiped[data-v-a7ce4ccc] {\n        max-width: 70vw;\n}\n}\n@media only screen and (min-width: 800px) {\n.zeroJobsEquiped[data-v-a7ce4ccc] {\n        /* background: green; */\n        min-width: 40vw;\n        width: 40vw;\n}\n.nonZeroJobsEquiped[data-v-a7ce4ccc] {\n        max-width: 60vw;\n}\n}\n@media only screen and (min-width: 1080px) {\n.zeroJobsEquiped[data-v-a7ce4ccc] {\n        /* background: purple; */\n        min-width: 30vw;\n        width: 30vw;\n}\n.nonZeroJobsEquiped[data-v-a7ce4ccc] {\n        max-width: 50vw;\n}\n}\n@media only screen and (min-width: 1500px) {\n.zeroJobsEquiped[data-v-a7ce4ccc] {\n        /* background: black; */\n        min-width: 20vw;\n        width: 20vw;\n}\n.nonZeroJobsEquiped[data-v-a7ce4ccc] {\n        width: -webkit-max-content;\n        width: -moz-max-content;\n        width: max-content;\n        min-width: 10vw;\n        max-width: 40vw;\n}\n}\n.addAJobText[data-v-a7ce4ccc] {\n    font-size: 1.5em;\n}\n.addAJobCont[data-v-a7ce4ccc] {\n    position: relative;\n    top: 20%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    width: 24%;\n    margin-left: 38%;\n    margin-right: 38%;\n}\n.addAJobCont2[data-v-a7ce4ccc] {\n    position: relative;\n    top: 20%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    width: 70%;\n    margin-left: 15%;\n    margin-right: 15%;\n}\n.AddJobCont[data-v-a7ce4ccc] {\n    position: absolute;\n    display: flex;\n    align-items: center;\n    top: 10%;\n    left: 91.5%;\n    width: 5%;\n    width: 40px;\n    height: 40px;\n    border-radius: 50px;\n    z-index: 2;\n}\n", ""]);
+exports.push([module.i, "\n.jobChanger[data-v-a7ce4ccc] {\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    padding-left: 7px;\n    padding-right: 7px;\n    height: 60px;\n    width: 0px;\n    background: grey;\n    border-radius: 40px;\n    margin: 0px auto 0px auto;\n    position: relative;\n}\n.jobChanger .jobListCont[data-v-a7ce4ccc] {\n    background: rgb(87, 87, 87);\n    overflow-x: auto;\n    border-radius: 100px;\n    width: 100%;\n    height: 51px;\n    line-height: 50px;\n}\n.jobChanger .AddOrRemoveJobCont[data-v-a7ce4ccc] {\n    height: 43px;\n    width: 100%;\n}\n.addRemoveJobButton[data-v-a7ce4ccc] {\n    width: 100%;\n    line-height: 45px;\n    border-radius: 30px;\n    font-size: 25px;\n    text-align: center;\n}\n.remove[data-v-a7ce4ccc] {\n    background: red;\n    color: white;\n}\n.equip[data-v-a7ce4ccc] {\n    background: green;\n    color: white;\n}\n.addRemoveJobButton[data-v-a7ce4ccc]:active {\n    border: none;\n    outline: none;\n}\n.addRemoveJobButton[data-v-a7ce4ccc]:hover {\n    -webkit-filter: grayscale(50%);\n            filter: grayscale(50%);\n}\n\n/** JobList scrollbar only */\n.jobListCont[data-v-a7ce4ccc]::-webkit-scrollbar {\n    height: 1px;\n}\n.jobListCont[data-v-a7ce4ccc]::-webkit-scrollbar-track {\n    background: transparent;\n}\n.jobListCont[data-v-a7ce4ccc]::-webkit-scrollbar-thumb {\n    background: rgb(71, 71, 71);\n}\n/** JobList scrollbar only */\n.equipRemoveButtonWidth[data-v-a7ce4ccc] {\n    width: 150px;\n}\n.textAndButtonCont[data-v-a7ce4ccc] {\n    position: absolute;\n    right: 6px;\n    top: 17%;\n    display:flex;\n    width: -webkit-max-content;\n    width: -moz-max-content;\n    width: max-content;\n}\n.textAndButtonCont .text[data-v-a7ce4ccc] {\n    margin: auto 5px auto 5px;\n    font-size: 20px;\n}\n.backArrowButton[data-v-a7ce4ccc] {\n    font-size: 40px;\n}\n.plusButton[data-v-a7ce4ccc] {\n    font-size: 38px;\n    height: 40px;\n    width: 40px;\n}\n@media only screen and (min-width: 500px) {\n.zeroJobsEquiped[data-v-a7ce4ccc] {\n        /* background: yellow; */\n        width: 50vw;\n}\n.nonZeroJobsEquiped[data-v-a7ce4ccc] {\n        max-width: 70vw;\n}\n}\n@media only screen and (min-width: 800px) {\n.zeroJobsEquiped[data-v-a7ce4ccc] {\n        /* background: green; */\n        width: 40vw;\n}\n.nonZeroJobsEquiped[data-v-a7ce4ccc] {\n        max-width: 60vw;\n}\n}\n@media only screen and (min-width: 1080px) {\n.zeroJobsEquiped[data-v-a7ce4ccc] {\n        /* background: purple; */\n        width: 30vw;\n}\n.nonZeroJobsEquiped[data-v-a7ce4ccc] {\n        max-width: 50vw;\n}\n}\n@media only screen and (min-width: 1500px) {\n.zeroJobsEquiped[data-v-a7ce4ccc] {\n        background: black;\n        max-width: 10vw;\n}\n.nonZeroJobsEquiped[data-v-a7ce4ccc] {\n        width: -webkit-max-content;\n        width: -moz-max-content;\n        width: max-content;\n        min-width: 15vw;\n        max-width: 40vw;\n}\n}\n.addAJobText[data-v-a7ce4ccc] {\n    font-size: 1.5em;\n}\n.addAJobCont[data-v-a7ce4ccc] {\n    position: relative;\n    top: 20%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    width: 24%;\n    margin-left: 38%;\n    margin-right: 38%;\n}\n.addAJobCont2[data-v-a7ce4ccc] {\n    position: relative;\n    top: 20%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    width: 70%;\n    margin-left: 15%;\n    margin-right: 15%;\n}\n.AddJobCont[data-v-a7ce4ccc] {\n    position: absolute;\n    display: flex;\n    align-items: center;\n    top: 10%;\n    left: 91.5%;\n    width: 5%;\n    width: 40px;\n    height: 40px;\n    border-radius: 50px;\n    z-index: 2;\n}\n", ""]);
 
 // exports
 
@@ -8300,7 +8366,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.JobEquipedCont[data-v-23371bf9] {\n    width: -webkit-max-content;\n    width: -moz-max-content;\n    width: max-content;\n    padding-left: 3%;\n    padding-right: 3%;\n    padding-top: .5%;\n    padding-bottom: .5%;\n    margin: 1%;\n    border-radius: 10px;\n    background: rgb(95, 0, 112);\n    color: white;\n}\n", ""]);
+exports.push([module.i, "\n.JobEquipedCont[data-v-23371bf9] {\n    display: inline;\n    word-wrap: nowrap;\n    white-space: nowrap;\n    line-height: 20px;\n    padding: 8px 10px;\n    border-radius: 30px;\n    background: rgb(95, 0, 112);\n    color: white;\n    margin: 4px;\n}\n.JobEquipedCont[data-v-23371bf9]:hover {\n    -webkit-filter: grayscale(50%);\n            filter: grayscale(50%);\n}\n", ""]);
 
 // exports
 
@@ -8319,7 +8385,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/**\n * Job Details Container\n */\n\n/**\n * inside col2\n */\n.col2[data-v-f1bbaa5c] {\n    width: 70%;\n    height: 100%;\n    display: flex;\n    flex-direction: row;\n}\n.statsIconCont[data-v-f1bbaa5c] {\n    width: 100px;\n    height: 100px;\n}\n.statsIcon[data-v-f1bbaa5c] {\n    -o-object-fit: contain;\n       object-fit: contain;\n    width: 100%;\n    height: 100%;\n}\n.jobDetailsCont[data-v-f1bbaa5c] {\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n    height: 100%;\n}\n.text[data-v-f1bbaa5c] {\n    height: 100%;\n}\n.jobImage[data-v-f1bbaa5c] {\n    max-width: 100%;\n    max-height: 100%;\n}\n.collapse[data-v-f1bbaa5c] {\n    display: flex;\n    height: 100%;\n    flex-flow: column;\n}\n.buildCol[data-v-f1bbaa5c] {\n    width: 55%;\n    height: 100%;\n    display: flex;\n    flex-direction: column;\n}\n.statsCol[data-v-f1bbaa5c] {\n    width: 45%;\n    height: 100%;\n    display: flex;\n    flex-direction: column;\n    justify-content: center;\n}\n.statsCol .StatsIconCont[data-v-f1bbaa5c] {\n    height: 15%;\n    display: flex;\n    margin-left: 10%;\n}\n.StatsIconCont>img[data-v-f1bbaa5c] {\n    height: 100%;\n    width: 35%;\n}\n.StatsIconCont .iconStats[data-v-f1bbaa5c] {\n    font-size: 3em;\n    justify-content: center;\n    align-self: center;\n    margin-left: 5%;\n}\n.StatsIconCont .selectCont[data-v-f1bbaa5c] {\n    height: 80%;\n    width: 80%;\n}\n.selectCont[data-v-f1bbaa5c] {\n    font-size: 35px;\n}\n.selectCont option[data-v-f1bbaa5c] {\n    font-size: 35px;\n}\n\n/*\n * EXPANDED \n */\n\n/**\n * Inside Col1\n */\n.col1[data-v-f1bbaa5c] {\n    display: flex;\n    height: auto;\n    flex-flow: column nowrap;\n    width: 30%;\n    /* border: solid orangered 5px; */\n}\n.col1 .expandedJobImage[data-v-f1bbaa5c] {\n    -o-object-fit: contain;\n       object-fit: contain;\n}\n.col1 .jobTitleDescCont[data-v-f1bbaa5c] {\n    display: flex;\n    flex-flow: column wrap;\n    height: 560px;\n    \n    /* border: yellowgreen solid 5px; */\n}\n.jobTitleDescCont .jobTitle[data-v-f1bbaa5c] {\n    font-size: 3em;\n    flex: 3;\n\n    padding: 5%;\n    /* border: blue 5px solid; */\n}\n.jobTitleDescCont .jobDesc[data-v-f1bbaa5c] {\n    font-size: 1.5em;\n    flex: 7;\n\n    padding: 5%;\n    word-break: break-all;\n    overflow-y: auto;\n    /* border: green 5px solid; */\n}\n.centerText[data-v-f1bbaa5c] {\n    text-align: justify;\n    text-justify: inter-word;\n}\n\n/**\n * default is the initial status of all grid cells \n */\n.default[data-v-f1bbaa5c] {\n    background: rgba(0, 5, 4, 0.8);\n    transition: top .5s, left .5s, width .5s, height .5s, opacity 1s, border .5s;\n    position: relative;\n    opacity: 1.0;\n    left: 0px; \n    top: 0px;\n    width: 100%; \n    height: 100%;\n    z-index: auto; /* don't remove, this prevents faded grid cells from getting clicked at the back of the expanded cell */\n    border: darkslategray 2px solid;\n    box-sizing: border-box;\n}\n\n/* Fade is applied to other grid cells when one of the cells is 'expanded' */\n.fade[data-v-f1bbaa5c] {\n    background: rgba(0, 5, 4, 0.8);\n    opacity: 0.0;\n}\n.expanded[data-v-f1bbaa5c] {\n    background: rgba(0, 5, 4, 0.8);\n    transition: top .5s, left .5s, width .5s, height .5s, opacity 1s, border .5s;\n    position: relative;\n    left: 0px; \n    top: 0px;\n    width: 100%; \n    height: 100%;\n    z-index: auto; /* don't remove, this prevents faded grid cells from getting clicked at the back of the expanded cell */\n    border: darkslategray 4px solid;\n    box-sizing: border-box;\n}\n.fadein-enter-active[data-v-f1bbaa5c] {\n    transition: opacity 0.2s;\n    transition-delay: .5s;\n}\n.fadein-enter[data-v-f1bbaa5c] { \n    opacity: 0;\n}\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/**\n *  Collapse mode\n */\n.collapse[data-v-f1bbaa5c] {\n    display: flex;\n    height: 100%;\n    flex-flow: column;\n}\n.jobImage[data-v-f1bbaa5c] {\n    max-width: 100%;\n    max-height: 80%;\n    -o-object-fit: fill;\n       object-fit: fill;\n}\n\n/**\n *  Expanded Mode\n *  Job Details Container\n */\n\n/* Inside Col1 */\n.col1[data-v-f1bbaa5c] {\n    display: flex;\n    height: auto;\n    flex-flow: column nowrap;\n    width: 30%;\n    /* border: solid orangered 5px; */\n}\n.col1 .expandedJobImage[data-v-f1bbaa5c] {\n    -o-object-fit: contain;\n       object-fit: contain;\n}\n.col1 .jobTitleDescCont[data-v-f1bbaa5c] {\n    display: flex;\n    flex-flow: column wrap;\n    height: 560px;\n    /* border: yellowgreen solid 5px; */\n}\n.jobTitleDescCont .jobTitle[data-v-f1bbaa5c] {\n    font-size: 3em;\n    flex: 3;\n\n    padding: 5%;\n    /* border: blue 5px solid; */\n}\n.jobTitleDescCont .jobDesc[data-v-f1bbaa5c] {\n    font-size: 1.5em;\n    flex: 7;\n\n    padding: 5%;\n    word-break: break-all;\n    overflow-y: auto;\n    /* border: green 5px solid; */\n}\n.centerText[data-v-f1bbaa5c] {\n    text-align: justify;\n    text-justify: inter-word;\n}\n/**\n * inside col2\n */\n.col2[data-v-f1bbaa5c] {\n    width: 70%;\n    height: 100%;\n    display: flex;\n    flex-direction: row;\n}\n.statsIconCont[data-v-f1bbaa5c] {\n    width: 100px;\n    height: 100px;\n}\n.statsIcon[data-v-f1bbaa5c] {\n    -o-object-fit: contain;\n       object-fit: contain;\n    width: 100%;\n    height: 100%;\n}\n.jobDetailsCont[data-v-f1bbaa5c] {\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n    height: 100%;\n}\n.text[data-v-f1bbaa5c] {\n    height: 100%;\n}\n.buildCol[data-v-f1bbaa5c] {\n    width: 55%;\n    height: 100%;\n    display: flex;\n    flex-direction: column;\n}\n.statsCol[data-v-f1bbaa5c] {\n    width: 45%;\n    height: 100%;\n    display: flex;\n    flex-direction: column;\n    justify-content: center;\n}\n.statsCol .StatsIconCont[data-v-f1bbaa5c] {\n    height: 15%;\n    display: flex;\n    margin-left: 10%;\n}\n.StatsIconCont>img[data-v-f1bbaa5c] {\n    height: 100%;\n    width: 35%;\n}\n.StatsIconCont .iconStats[data-v-f1bbaa5c] {\n    font-size: 3em;\n    justify-content: center;\n    align-self: center;\n    margin-left: 5%;\n}\n.StatsIconCont .selectCont[data-v-f1bbaa5c] {\n    height: 80%;\n    width: 80%;\n}\n.selectCont[data-v-f1bbaa5c] {\n    font-size: 35px;\n}\n.selectCont option[data-v-f1bbaa5c] {\n    font-size: 35px;\n}\n\n/**\n * default is the initial status of all grid cells \n */\n.default[data-v-f1bbaa5c] {\n    background: rgba(0, 5, 4, 0.8);\n    transition: top .5s, left .5s, width .5s, height .5s, opacity 1s, border .5s;\n    position: relative;\n    opacity: 1.0;\n    left: 0px; \n    top: 0px;\n    width: 100%; \n    height: 100%;\n    z-index: auto; /* don't remove, this prevents faded grid cells from getting clicked at the back of the expanded cell */\n    border: darkslategray 2px solid;\n    box-sizing: border-box;\n}\n\n/* Fade is applied to other grid cells when one of the cells is 'expanded' */\n.fade[data-v-f1bbaa5c] {\n    background: rgba(0, 5, 4, 0.8);\n    opacity: 0.0;\n}\n.expanded[data-v-f1bbaa5c] {\n    background: rgba(0, 5, 4, 0.8);\n    transition: top .5s, left .5s, width .5s, height .5s, opacity 1s, border .5s;\n    position: relative;\n    left: 0px; \n    top: 0px;\n    width: 100%; \n    height: 100%;\n    z-index: auto; /* don't remove, this prevents faded grid cells from getting clicked at the back of the expanded cell */\n    border: darkslategray 4px solid;\n    box-sizing: border-box;\n}\n.fadein-enter-active[data-v-f1bbaa5c] {\n    transition: opacity 0.2s;\n    transition-delay: .5s;\n}\n.fadein-enter[data-v-f1bbaa5c] { \n    opacity: 0;\n}\n", ""]);
 
 // exports
 
@@ -8338,7 +8404,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.jobGrid[data-v-5e6eca94] {\n    display: grid;\n    grid-template-columns: 10% 10% 10% 10% 10% 10% 10% ;\n    grid-template-rows: 25% 25% 25% 25% ;\n    grid-column-gap: 5%;\n    grid-row-gap: 3%;\n    \n    margin: auto;\n    margin-top: 2%;\n    width: 90%;\n    height: 90%;\n    max-width: 90%;\n    max-height: 90%;\n}\n", ""]);
+exports.push([module.i, "\n.jobGrid[data-v-5e6eca94] {\n    display: grid;\n    grid-template-columns: 10% 10% 10% 10% 10% 10% 10% ;\n    grid-template-rows: 25% 25% 25% 25% ;\n    grid-column-gap: 5%;\n    grid-row-gap: 3%;\n    overflow: hidden;\n    \n    margin: auto;\n    margin-top: 2%;\n    width: 90%;\n    height: 90%;\n    max-width: 90%;\n    max-height: 90%;\n}\n", ""]);
 
 // exports
 
@@ -8376,26 +8442,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.iconDeviatedCSS[data-v-40ca9235] {\n    width: 34px;\n    height: 34px;\n}\n\n", ""]);
-
-// exports
-
-
-/***/ }),
-
-/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/minorComponents/PlusButton.vue?vue&type=style&index=0&id=a250b80a&scoped=true&lang=css&":
-/*!********************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/minorComponents/PlusButton.vue?vue&type=style&index=0&id=a250b80a&scoped=true&lang=css& ***!
-  \********************************************************************************************************************************************************************************************************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
-// imports
-
-
-// module
-exports.push([module.i, "\n.iconDeviatedCSS[data-v-a250b80a] {\n    font-size: 32px;\n    width: 34px;\n    height: 34px;\n}\n\n", ""]);
+exports.push([module.i, "\n.iconDeviatedCSS[data-v-40ca9235] {\n    width: 40px;\n    height: 40px;\n}\n\n", ""]);
 
 // exports
 
@@ -8414,7 +8461,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\ndiv[data-v-2198c09b] {\n    text-align: center\n}\n", ""]);
+exports.push([module.i, "\ndiv[data-v-2198c09b] {\n    text-align: center;\n    border: green solid 1px;\n}\n", ""]);
 
 // exports
 
@@ -39874,36 +39921,6 @@ if(false) {}
 
 /***/ }),
 
-/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/minorComponents/PlusButton.vue?vue&type=style&index=0&id=a250b80a&scoped=true&lang=css&":
-/*!************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/minorComponents/PlusButton.vue?vue&type=style&index=0&id=a250b80a&scoped=true&lang=css& ***!
-  \************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-var content = __webpack_require__(/*! !../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./PlusButton.vue?vue&type=style&index=0&id=a250b80a&scoped=true&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/minorComponents/PlusButton.vue?vue&type=style&index=0&id=a250b80a&scoped=true&lang=css&");
-
-if(typeof content === 'string') content = [[module.i, content, '']];
-
-var transform;
-var insertInto;
-
-
-
-var options = {"hmr":true}
-
-options.transform = transform
-options.insertInto = undefined;
-
-var update = __webpack_require__(/*! ../../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
-
-if(content.locals) module.exports = content.locals;
-
-if(false) {}
-
-/***/ }),
-
 /***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/minorComponents/ScaleFontSize.vue?vue&type=style&index=0&id=2198c09b&scoped=true&lang=css&":
 /*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/minorComponents/ScaleFontSize.vue?vue&type=style&index=0&id=2198c09b&scoped=true&lang=css& ***!
@@ -40749,7 +40766,7 @@ var render = function() {
     [
       _c("transition", { attrs: { name: "avatar" } }, [
         _c("div", { staticClass: "absoluteCont" }, [
-          _vm.view === "home"
+          _vm.view === this.$store.state.viewNames["HOME"]
             ? _c("div", { staticClass: "avatar" }, [
                 _c("div", { staticClass: "mx-auto" }, [
                   _c("img", {
@@ -40775,7 +40792,11 @@ var render = function() {
       _c(
         "transition",
         { attrs: { name: "jobSelector" } },
-        [_vm.view === "jobSelector" ? _c("job-selector") : _vm._e()],
+        [
+          _vm.view === this.$store.state.viewNames["JOB_SELECTOR"]
+            ? _c("job-selector")
+            : _vm._e()
+        ],
         1
       )
     ],
@@ -40807,10 +40828,11 @@ var render = function() {
   return _c(
     "div",
     {
-      staticClass: "jobChanger",
+      staticClass: "jobChanger myc",
       class: {
-        zeroJobsEquiped: _vm.equipedJobs.length === 0,
-        nonZeroJobsEquiped: _vm.equipedJobs.length > 0
+        equipRemoveButtonWidth: _vm.jobChangerWidth === 0,
+        zeroJobsEquiped: _vm.jobChangerWidth === 1,
+        nonZeroJobsEquiped: _vm.jobChangerWidth === 2
       }
     },
     [
@@ -40840,58 +40862,54 @@ var render = function() {
               ]
             )
           ])
-        : _c("div", { staticClass: "jobListCont" }, [
-            _vm.equipedJobs > 0
-              ? _c(
-                  "div",
-                  { staticClass: "jobCont bg-danger" },
-                  _vm._l(_vm.equipedJob, function(job) {
-                    return _c("JobEquipedCont", { key: job.id })
-                  }),
-                  1
-                )
-              : _vm._e(),
-            _vm._v(" "),
-            _c(
-              "div",
-              {
-                staticClass: "textAndButtonCont",
-                class: {
-                  textAndButtonContNoJob: _vm.equipedJobs.length === 0,
-                  textAndButtonContWithJob: _vm.equipedJobs.length > 0
-                }
-              },
-              [
-                _c("div", { staticClass: "text" }, [
-                  _vm._v(
-                    "\n                " +
-                      _vm._s(_vm.text) +
-                      "   \n            "
-                  )
-                ]),
-                _vm._v(" "),
-                _vm.view === "jobSelector"
-                  ? _c("back-arrow-button", {
-                      staticClass: "backArrowButton",
-                      nativeOn: {
-                        click: function($event) {
-                          return _vm.addJob($event)
-                        }
+        : _c(
+            "div",
+            { staticClass: "jobListCont" },
+            _vm._l(_vm.equipedJobs, function(job) {
+              return _c("JobEquipedCont", {
+                key: job.id,
+                attrs: { equipedJob: job }
+              })
+            }),
+            1
+          ),
+      _vm._v(" "),
+      !(_vm.selectedJob !== null)
+        ? _c(
+            "div",
+            { staticClass: "textAndButtonCont" },
+            [
+              _vm.equipedJobs.length === 0
+                ? _c("div", { staticClass: "text" }, [
+                    _vm._v(
+                      "\n            " + _vm._s(_vm.text) + "   \n        "
+                    )
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.view === this.$store.state.viewNames["JOB_SELECTOR"]
+                ? _c("back-arrow-button", {
+                    staticClass: "backArrowButton",
+                    nativeOn: {
+                      click: function($event) {
+                        return _vm.addJob($event)
                       }
-                    })
-                  : _vm.view === "home"
-                  ? _c("plus-button", {
-                      nativeOn: {
-                        click: function($event) {
-                          return _vm.addJob($event)
-                        }
+                    }
+                  })
+                : _vm.view === this.$store.state.viewNames["HOME"]
+                ? _c("plus-button", {
+                    staticClass: "plusButton",
+                    nativeOn: {
+                      click: function($event) {
+                        return _vm.addJob($event)
                       }
-                    })
-                  : _vm._e()
-              ],
-              1
-            )
-          ])
+                    }
+                  })
+                : _vm._e()
+            ],
+            1
+          )
+        : _vm._e()
     ]
   )
 }
@@ -40917,9 +40935,11 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "JobEquipedCont" }, [
-    _vm._v("\n    " + _vm._s(_vm.equipedJob.title) + "\n")
-  ])
+  return _c(
+    "div",
+    { staticClass: "JobEquipedCont", on: { click: _vm.viewEquipedJob } },
+    [_vm._v("\n    " + _vm._s(_vm.equipedJob.title) + "\n")]
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -40955,7 +40975,7 @@ var render = function() {
       style: _vm.expandCSS,
       on: {
         click: function($event) {
-          return _vm.toggleJobSelected($event)
+          return _vm.toggleJobSelected()
         }
       }
     },
@@ -40967,9 +40987,10 @@ var render = function() {
             [
               _c("img", { staticClass: "jobImage", attrs: { src: _vm.css } }),
               _vm._v(" "),
-              _c("div", [_vm._v(_vm._s(_vm.job.t))]),
-              _vm._v(" "),
-              _c("scale-font-size", { attrs: { text: _vm.job.title } })
+              _c("scale-font-size", {
+                staticClass: "jobTitle",
+                attrs: { text: _vm.job.title }
+              })
             ],
             1
           )
@@ -41182,9 +41203,9 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "jobGrid", style: _vm.jobGridCSS, attrs: { id: "jobGrid" } },
-    _vm._l(_vm.jobs, function(job) {
-      return _c("job-cell", { key: job.id, attrs: { job: job } })
+    { staticClass: "jobGrid", attrs: { id: "jobGrid" } },
+    _vm._l(_vm.jobs, function(job, index) {
+      return _c("job-cell", { key: job.id, attrs: { job: job, index: index } })
     }),
     1
   )
@@ -41250,10 +41271,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/minorComponents/PlusButton.vue?vue&type=template&id=a250b80a&scoped=true&":
-/*!*****************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/minorComponents/PlusButton.vue?vue&type=template&id=a250b80a&scoped=true& ***!
-  \*****************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/minorComponents/PlusButton.vue?vue&type=template&id=a250b80a&":
+/*!*****************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/minorComponents/PlusButton.vue?vue&type=template&id=a250b80a& ***!
+  \*****************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -41265,11 +41286,9 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "span",
-    { staticClass: "material-icons iconCont iconDeviatedCSS" },
-    [_vm._v("\n    add\n")]
-  )
+  return _c("span", { staticClass: "material-icons iconCont" }, [
+    _vm._v("\n    add\n")
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -55929,23 +55948,21 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _PlusButton_vue_vue_type_template_id_a250b80a_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PlusButton.vue?vue&type=template&id=a250b80a&scoped=true& */ "./resources/js/components/minorComponents/PlusButton.vue?vue&type=template&id=a250b80a&scoped=true&");
-/* harmony import */ var _PlusButton_vue_vue_type_style_index_0_id_a250b80a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PlusButton.vue?vue&type=style&index=0&id=a250b80a&scoped=true&lang=css& */ "./resources/js/components/minorComponents/PlusButton.vue?vue&type=style&index=0&id=a250b80a&scoped=true&lang=css&");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony import */ var _PlusButton_vue_vue_type_template_id_a250b80a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PlusButton.vue?vue&type=template&id=a250b80a& */ "./resources/js/components/minorComponents/PlusButton.vue?vue&type=template&id=a250b80a&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 var script = {}
 
 
-
 /* normalize component */
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__["default"])(
   script,
-  _PlusButton_vue_vue_type_template_id_a250b80a_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _PlusButton_vue_vue_type_template_id_a250b80a_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _PlusButton_vue_vue_type_template_id_a250b80a___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _PlusButton_vue_vue_type_template_id_a250b80a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
-  "a250b80a",
+  null,
   null
   
 )
@@ -55957,35 +55974,19 @@ component.options.__file = "resources/js/components/minorComponents/PlusButton.v
 
 /***/ }),
 
-/***/ "./resources/js/components/minorComponents/PlusButton.vue?vue&type=style&index=0&id=a250b80a&scoped=true&lang=css&":
-/*!*************************************************************************************************************************!*\
-  !*** ./resources/js/components/minorComponents/PlusButton.vue?vue&type=style&index=0&id=a250b80a&scoped=true&lang=css& ***!
-  \*************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_PlusButton_vue_vue_type_style_index_0_id_a250b80a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/style-loader!../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./PlusButton.vue?vue&type=style&index=0&id=a250b80a&scoped=true&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/minorComponents/PlusButton.vue?vue&type=style&index=0&id=a250b80a&scoped=true&lang=css&");
-/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_PlusButton_vue_vue_type_style_index_0_id_a250b80a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_PlusButton_vue_vue_type_style_index_0_id_a250b80a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_PlusButton_vue_vue_type_style_index_0_id_a250b80a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_PlusButton_vue_vue_type_style_index_0_id_a250b80a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
- /* harmony default export */ __webpack_exports__["default"] = (_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_PlusButton_vue_vue_type_style_index_0_id_a250b80a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
-
-/***/ }),
-
-/***/ "./resources/js/components/minorComponents/PlusButton.vue?vue&type=template&id=a250b80a&scoped=true&":
-/*!***********************************************************************************************************!*\
-  !*** ./resources/js/components/minorComponents/PlusButton.vue?vue&type=template&id=a250b80a&scoped=true& ***!
-  \***********************************************************************************************************/
+/***/ "./resources/js/components/minorComponents/PlusButton.vue?vue&type=template&id=a250b80a&":
+/*!***********************************************************************************************!*\
+  !*** ./resources/js/components/minorComponents/PlusButton.vue?vue&type=template&id=a250b80a& ***!
+  \***********************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PlusButton_vue_vue_type_template_id_a250b80a_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./PlusButton.vue?vue&type=template&id=a250b80a&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/minorComponents/PlusButton.vue?vue&type=template&id=a250b80a&scoped=true&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PlusButton_vue_vue_type_template_id_a250b80a_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PlusButton_vue_vue_type_template_id_a250b80a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./PlusButton.vue?vue&type=template&id=a250b80a& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/minorComponents/PlusButton.vue?vue&type=template&id=a250b80a&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PlusButton_vue_vue_type_template_id_a250b80a___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PlusButton_vue_vue_type_template_id_a250b80a_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PlusButton_vue_vue_type_template_id_a250b80a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
@@ -56709,6 +56710,9 @@ var mutations = {
   },
   setUserDataEquipedJobs: function setUserDataEquipedJobs(state, n) {
     state.user.userJobs = n;
+  },
+  safeToExpand: function safeToExpand(state, n) {
+    state.job.safeToExpand = n;
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (mutations);
@@ -56729,13 +56733,24 @@ var state = {
   skillView: true,
   skill: null,
   view: {
-    name: 'home',
+    name: 'HOME',
     payload: null
   },
   job: {
     availableJobs: [],
     jobSelectorCSS: null,
-    selectedJob: null
+    selectedJob: null,
+    safeToExpand: false
+  },
+
+  /**
+   * These are the names of the available view states 
+   * - send as a payload whenever using mutation this.$store.commit('viewState',<viewNames>)
+   */
+  viewNames: {
+    HOME: 'HOME',
+    JOB_SELECTOR: 'JOB_SELECTOR',
+    JOB_SELECTED: 'JOB_SELECTED'
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (state);

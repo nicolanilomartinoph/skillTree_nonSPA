@@ -1,5 +1,5 @@
 <template>
-    <div @click="toggleJobSelected($event)" :style="expandCSS" ref="template"
+    <div @click="toggleJobSelected()" :style="expandCSS" ref="template"
         :class="{ 
             default: noOneIsExpanding, 
             expanded: IamExpanding,
@@ -8,10 +8,8 @@
         
         <!-- collapse -->
         <div v-if="noOneIsExpanding" class="collapse">
-            <!-- This globalAssets is just for testing, DELETE THIS LATER C--- css props--> 
             <img class="jobImage" :src="css" />
-            <div>{{ job.t}}</div>
-            <scale-font-size :text="job.title" />
+            <scale-font-size :text="job.title" class="jobTitle" />
         </div>
 
         <!-- expanded -->
@@ -86,9 +84,69 @@
 
 <style scoped>
 /**
- * Job Details Container
+ *  Collapse mode
  */
 
+ .collapse {
+    display: flex;
+    height: 100%;
+    flex-flow: column;
+ }
+
+ .jobImage {
+    max-width: 100%;
+    max-height: 80%;
+    object-fit: fill;
+}
+
+/**
+ *  Expanded Mode
+ *  Job Details Container
+ */
+
+/* Inside Col1 */
+
+.col1 {
+    display: flex;
+    height: auto;
+    flex-flow: column nowrap;
+    width: 30%;
+    /* border: solid orangered 5px; */
+}
+
+.col1 .expandedJobImage {
+    object-fit: contain;
+}
+
+.col1 .jobTitleDescCont {
+    display: flex;
+    flex-flow: column wrap;
+    height: 560px;
+    /* border: yellowgreen solid 5px; */
+}
+
+.jobTitleDescCont .jobTitle {
+    font-size: 3em;
+    flex: 3;
+
+    padding: 5%;
+    /* border: blue 5px solid; */
+}
+
+.jobTitleDescCont .jobDesc {
+    font-size: 1.5em;
+    flex: 7;
+
+    padding: 5%;
+    word-break: break-all;
+    overflow-y: auto;
+    /* border: green 5px solid; */
+}
+
+.centerText {
+    text-align: justify;
+    text-justify: inter-word;
+}
 /**
  * inside col2
  */
@@ -98,6 +156,8 @@
     display: flex;
     flex-direction: row;
 }
+
+
 
 .statsIconCont {
     width: 100px;
@@ -120,17 +180,6 @@
  
  .text {
     height: 100%;
- }
-
- .jobImage {
-    max-width: 100%;
-    max-height: 100%;
-}
-
- .collapse {
-    display: flex;
-    height: 100%;
-    flex-flow: column;
  }
 
 .buildCol {
@@ -177,57 +226,6 @@
 
 .selectCont option {
     font-size: 35px;
-}
-
-/*
- * EXPANDED 
- */
-
-/**
- * Inside Col1
- */
-
-.col1 {
-    display: flex;
-    height: auto;
-    flex-flow: column nowrap;
-    width: 30%;
-    /* border: solid orangered 5px; */
-}
-
-.col1 .expandedJobImage {
-    object-fit: contain;
-}
-
-.col1 .jobTitleDescCont {
-    display: flex;
-    flex-flow: column wrap;
-    height: 560px;
-    
-    /* border: yellowgreen solid 5px; */
-}
-
-.jobTitleDescCont .jobTitle {
-    font-size: 3em;
-    flex: 3;
-
-    padding: 5%;
-    /* border: blue 5px solid; */
-}
-
-.jobTitleDescCont .jobDesc {
-    font-size: 1.5em;
-    flex: 7;
-
-    padding: 5%;
-    word-break: break-all;
-    overflow-y: auto;
-    /* border: green 5px solid; */
-}
-
-.centerText {
-    text-align: justify;
-    text-justify: inter-word;
 }
 
 /**
@@ -279,11 +277,9 @@
 
 <script>
 export default {
-    props: ['job'],
+    props: ['job','index'],
     data() {
         return {
-            expand: false,
-            expandCSS: {zIndex: 1},
             currentPos: null,
             /**
              * THIS BUILD IS A FUTURE FEATURE
@@ -353,40 +349,51 @@ export default {
         gridCSS() {
             return this.$store.state.job.jobSelectorCSS
         },
+        safeToExpand() {
+            return this.$store.state.job.safeToExpand
+        },
         IamExpanding() {
-            let selectedJob = this.$store.state.job.selectedJob
-
-            if(selectedJob !== null){
-                return selectedJob.id === this.job.id? true:false
-            }else{
+            if(this.$store.state.job.selectedJob !== null)  
+                return this.$store.state.job.selectedJob.id === this.job.id? true:false
+            else
                 return false
-            }
         },
         someoneIsExpanding() {
-            let selectedJob = this.$store.state.job.selectedJob
-
-            if(selectedJob !== null){
-                return selectedJob.id !== this.job.id && this.$store.state.job.selectedJob.id !== null ? true:false 
-            }else{
+            if(this.$store.state.job.selectedJob !== null)
+                return this.$store.state.job.selectedJob.id !== this.job.id && this.$store.state.job.selectedJob.id !== null ? true:false 
+            else
                 return false
-            }
         },
         noOneIsExpanding() {
             return this.$store.state.job.selectedJob === null? true : false
         },
-    },
-    methods: {
-        toggleJobSelected(e) {
-            let expand = {
-                position: 'relative',
-                left: `${this.gridCSS.left - this.currentPos.left}px`,
-                top: `${this.gridCSS.top - this.currentPos.top}px`,
-                width: `1000%`,
-                height: `400%`,
-                zIndex: 2, //don't remove, this prevents faded grid cells from getting clicked at the back of the expanded cell
+        expand() {
+            /**
+             * Since computed properties are calculate before mounted() is called, we need to return something
+             * to avoid "(error during evaluation)" error
+             */
+            if(this.currentPos === null) {
+                /**
+                 * If getBoundingClientRect() is not yet ran, there will be no position info
+                 */
+                return {}
+            }else{
+                /**
+                 * When getBoundingClientRect() is ran, this.currentPos will be available to calculate
+                 * now we know how to expand
+                 */
+                return {
+                    position: 'relative',
+                    left: `${this.gridCSS.left - this.currentPos.left}px`,
+                    top: `${this.gridCSS.top - this.currentPos.top}px`,
+                    width: `1000%`,
+                    height: `400%`,
+                    zIndex: 2, //don't remove, this prevents faded grid cells from getting clicked at the back of the expanded cell
+                }
             }
-
-            let notExpand = {
+        },
+        notExpand() {
+            return {
                 position: 'relative',
                 left: '0px',
                 top: '0px',
@@ -394,14 +401,23 @@ export default {
                 height: '100%',
                 zIndex: 1, //don't remove, this prevents faded grid cells from getting clicked at the back of the expanded cell
             }
-            
-            if(!this.expand) {
-                this.expand = !this.expand
-                this.expandCSS = expand
+        },
+        expandCSS() {
+            if(this.IamExpanding && this.safeToExpand ) return this.expand
+            else                                        return this.notExpand
+        },
+        
+        /**
+         * after mounting, it will be calculated
+         * set safeToExpand to true
+         * 
+         */
+    },
+    methods: {
+        toggleJobSelected() {
+            if(!this.IamExpanding) {
                 this.$store.commit('jobSelected', this.job)
             }else{
-                this.expand = !this.expand
-                this.expandCSS = notExpand
                 this.$store.commit('jobSelected', null)
             }
         },
@@ -424,7 +440,17 @@ export default {
         }
     },
     mounted() {
+        /**
+         * This will get the position on the screen of each job Cell
+         * These values are used to calculate the how and where should each job Cell expands when selected
+         */
         this.currentPos = this.$refs["template"].getBoundingClientRect()
-    }
+
+        this.$store.commit('safeToExpand', false)
+        if(this.index +1 === this.$store.state.job.availableJobs.length) {
+            // all cells are displayed and getBoundingClientRect are known
+            this.$store.commit('safeToExpand', true)
+        }
+    },
 }
 </script>

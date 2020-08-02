@@ -48,5 +48,12 @@ function skill_unpacker($skill, $recursive = true, &$parent_skills = null)
 }
 
 function getUserEquipedJobs() {
-    return \Auth::user()->userJob()->get();
+    $equipedUserJobs = \Auth::user()->userJob()->get();
+    
+    for($i = 0; $i < count($equipedUserJobs); $i++) {
+        $equipedUserJobs[$i]['title'] = \DB::table('jobs')->select('title')->where('id', '=', $equipedUserJobs[$i]->job_id)->get()[0]->title;
+        
+    }
+
+    return $equipedUserJobs;
 }

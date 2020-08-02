@@ -6,7 +6,8 @@
 
 <style scoped>
 div {
-    text-align: center
+    text-align: center;
+    border: green solid 1px;
 }
 </style>
 

@@ -3,7 +3,7 @@
     <div class="pageLevelComponent">
         <transition name="avatar">
             <div class="absoluteCont">
-                <div v-if="view === 'home'" class="avatar" >
+                <div v-if="view === this.$store.state.viewNames['HOME']" class="avatar" >
                     <div class="mx-auto">
                         <img class="userImage " :src="char.image" />
                     </div>
@@ -14,7 +14,7 @@
             <job-changer />
         </div> 
         <transition name="jobSelector">
-            <job-selector v-if="view === 'jobSelector'" />
+            <job-selector v-if="view === this.$store.state.viewNames['JOB_SELECTOR']" />
         </transition>
     </div>
 </template>
@@ -110,7 +110,7 @@ export default {
     },
     computed: {
         view: function() { return this.$store.state.view.name },
-        jobChangerCont() { return { top: this.view === 'home' ? '70%' : '90%', }},
+        jobChangerCont() { return { top: this.view === this.$store.state.viewNames['HOME'] ? '70%' : '90%', }},
         charName() { return this.$store.user.id },
         charImage() { return this.$store.user.image },
         charJobs() { return this.$store.user.jobs }
@@ -121,9 +121,13 @@ export default {
     },
     created() {
         this.$store.commit('setUserData', this.user)
-        if(this.view === 'home') {
-            this.$store.commit('viewState', 'home')
-        }   
+
+        /**
+         * lets try removing this, this is supposed to resolve the refreshing problem
+        if(this.view === this.$store.state.viewNames['HOME']) {
+            this.$store.commit('viewState', this.$store.state.viewNames['HOME'])
+        }  
+         */ 
     }
 }
 </script>

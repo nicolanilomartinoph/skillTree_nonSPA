@@ -6,8 +6,8 @@
 
 <style scoped>
 .iconDeviatedCSS {
-    width: 34px;
-    height: 34px;
+    width: 40px;
+    height: 40px;
 }
 
 </style>

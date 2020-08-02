@@ -1,14 +1,6 @@
 <template>
-    <span class="material-icons iconCont iconDeviatedCSS">
+    <span class="material-icons iconCont">
         add
     </span>
 </template>
 
-<style scoped>
-.iconDeviatedCSS {
-    font-size: 32px;
-    width: 34px;
-    height: 34px;
-}
-
-</style>

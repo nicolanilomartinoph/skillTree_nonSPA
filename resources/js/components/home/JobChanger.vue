@@ -3,51 +3,68 @@
         This component changes if : 
         1.  no job equiped && view === 'home'           THEN small width, text = 'add a job', plus button
         1.1 no job equiped && view === 'jobSelector'    THEN small width, text = 'select a job, plus button 
-        1.2 no job equiped && view === 'jobSelected'    THEN small width, add or equip button
+        1.2 no job equiped && view === 'jobSelected'    THEN small width, no text,'equip/remove' button
 
-        2   a job is equiped && view === 'home'         THEN max width, no text, plus button, with jobCont
-        2.2 a job is equiped && view === 'jobSelector'  THEN max width, no text, back-arrow button, with jobCont
-        2.3 a job is equiped && view === 'jobSelected'  THEN add or equip button
+        2   a job is equiped && view === 'home'         THEN max-content width, no text, plus button, with jobCont
+        2.2 a job is equiped && view === 'jobSelector'  THEN max-content width, no text, back-arrow button, with jobCont
+        2.3 a job is equiped && view === 'jobSelected'  THEN 'equip/remove' button, no text/jobCont
     -->
-    <div class="jobChanger" :class="{ zeroJobsEquiped: equipedJobs.length === 0, nonZeroJobsEquiped: equipedJobs.length > 0 }">
+    <div class="jobChanger myc" :class="{
+            equipRemoveButtonWidth: jobChangerWidth === 0,
+            zeroJobsEquiped: jobChangerWidth === 1, 
+            nonZeroJobsEquiped: jobChangerWidth === 2 
+    }">
         <div v-if="selectedJob !== null" class="AddOrRemoveJobCont">
             <div :class="{ addRemoveJobButton: true , remove: isJobEquiped, equip: !isJobEquiped }" @click.stop="addOrRemoveJob">
                 {{ isJobEquiped ? 'Unequip' : 'Equip'}}
             </div>
         </div>
         <div v-else class="jobListCont" >
-            <div  v-if="equipedJobs > 0" class="jobCont bg-danger">
-                <JobEquipedCont v-for="job in equipedJob" :key="job.id" />
+            <JobEquipedCont v-for="job in equipedJobs" :key="job.id" :equipedJob="job" />
+        </div>
+        <div v-if="!(selectedJob !== null)" class="textAndButtonCont" >
+            <div v-if="equipedJobs.length === 0" class="text">
+                {{ text }} &nbsp 
             </div>
-            <div class="textAndButtonCont" :class="{ textAndButtonContNoJob: equipedJobs.length === 0, textAndButtonContWithJob: equipedJobs.length > 0}" >
-                <div class="text">
-                    {{ text }} &nbsp 
-                </div>
-                <back-arrow-button @click.native="addJob" v-if="view === 'jobSelector'" class="backArrowButton" />
-                <plus-button @click.native="addJob" v-else-if="view === 'home'" />
-            </div>
+            <back-arrow-button @click.native="addJob" v-if="view === this.$store.state.viewNames['JOB_SELECTOR']" class="backArrowButton" />
+            <plus-button @click.native="addJob" v-else-if="view === this.$store.state.viewNames['HOME']" class="plusButton"/>
         </div>
     </div>
 </template>
 
 <style scoped>
 .jobChanger {
-    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-left: 7px;
+    padding-right: 7px;
+    height: 60px;
+    width: 0px;
     background: grey;
-    border-radius: 30px;
+    border-radius: 40px;
     margin: 0px auto 0px auto;
-    padding: 5px;
+    position: relative;
+}
+
+.jobChanger .jobListCont {
+    background: rgb(87, 87, 87);
+    overflow-x: auto;
+    border-radius: 100px;
+    width: 100%;
+    height: 51px;
+    line-height: 50px;
 }
 
 .jobChanger .AddOrRemoveJobCont {
-    height: 40px;
+    height: 43px;
+    width: 100%;
 }
 
 .addRemoveJobButton {
     width: 100%;
-    height: 100%;
+    line-height: 45px;
     border-radius: 30px;
-    border: solid black 1px;
     font-size: 25px;
     text-align: center;
 }
@@ -71,31 +88,30 @@
     filter: grayscale(50%);
 }
 
-.jobChanger .jobListCont {
-    position: relative;
-    display: flex;
-    height: 40px;
-    text-align: center;
-    border-radius: 30px;
-    margin: auto;
+/** JobList scrollbar only */
+.jobListCont::-webkit-scrollbar {
+    height: 1px;
 }
 
-.jobCont {
-    width: 50px;
+.jobListCont::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.jobListCont::-webkit-scrollbar-thumb {
+    background: rgb(71, 71, 71);
+}
+/** JobList scrollbar only */
+
+.equipRemoveButtonWidth {
+    width: 150px;
 }
 
 .textAndButtonCont {
+    position: absolute;
+    right: 6px;
+    top: 17%;
     display:flex;
     width: max-content;
-}
-
-.textAndButtonContNoJob {
-    margin: auto;
-}
-
-.textAndButtonContWithJob {
-    position: absolute;
-    right: 5px;
 }
 
 .textAndButtonCont .text {
@@ -104,36 +120,18 @@
 }
 
 .backArrowButton {
-    font-size: 32px;
+    font-size: 40px;
 }
 
-.jobListCont .jobList {
-    display: flex;
-    flex-direction: row;
-    border-radius: 15px;
-    justify-content:space-evenly;
-}
-
-.jobListCont::-webkit-scrollbar {
-    height: 10px;
-    border-radius: 3px;
-}
-
-.jobListCont::-webkit-scrollbar-track {
-    background: transparent;
-    
-}
-
-.jobListCont::-webkit-scrollbar-thumb {
-    background: grey;
-    border-radius: 5px;
-    border: 1px solid white;
+.plusButton {
+    font-size: 38px;
+    height: 40px;
+    width: 40px;
 }
 
 @media only screen and (min-width: 500px) {
     .zeroJobsEquiped {
         /* background: yellow; */
-        min-width: 50vw;
         width: 50vw;
     }    
 
@@ -145,7 +143,6 @@
 @media only screen and (min-width: 800px) {
     .zeroJobsEquiped {
         /* background: green; */
-        min-width: 40vw;
         width: 40vw;
     }  
 
@@ -157,8 +154,8 @@
 @media only screen and (min-width: 1080px) {
     .zeroJobsEquiped {
         /* background: purple; */
-        min-width: 30vw;
         width: 30vw;
+        
     }  
 
     .nonZeroJobsEquiped {
@@ -168,14 +165,13 @@
 
 @media only screen and (min-width: 1500px) {
     .zeroJobsEquiped {
-        /* background: black; */
-        min-width: 20vw;
-        width: 20vw;
+        background: black;
+        max-width: 10vw;
     }   
     
     .nonZeroJobsEquiped {
         width: max-content;
-        min-width: 10vw;
+        min-width: 15vw;
         max-width: 40vw;
     }
 }
@@ -251,7 +247,7 @@ export default {
             return this.$store.state.view.name
         },
         text() {
-            return this.view === 'home' ? 'Add a job' : 'Select a job'
+            return this.view === this.$store.state.viewNames['HOME'] ? 'Add a job' : 'Select a job'
         },
         /**
          * Asks if the current selected Job is already equiped by the user
@@ -269,15 +265,20 @@ export default {
                 }
             }
             return false
+        },
+        jobChangerWidth() {
+            if(this.selectedJob)                    return 0
+            else if(this.equipedJobs.length === 0)  return 1
+            else if(this.equipedJobs.length > 0)    return 2
         }
     },
     methods: {
         addJob() {
-            if(this.$store.state.view.name === 'home') {
-                this.$store.commit('viewState', 'jobSelector')
+            if(this.$store.state.view.name === this.$store.state.viewNames['HOME']) {
+                this.$store.commit('viewState', this.$store.state.viewNames['JOB_SELECTOR'])
             }
-            else if(this.$store.state.view.name === 'jobSelector') {
-                this.$store.commit('viewState', 'home')
+            else if(this.$store.state.view.name === this.$store.state.viewNames['JOB_SELECTOR']) {
+                this.$store.commit('viewState', this.$store.state.viewNames['HOME'])
             }
         },
         addOrRemoveJob() {
@@ -291,6 +292,7 @@ export default {
                 .then(res => this.$store.dispatch('setUserDataEquipedJobs', res.data ))
                 .catch(err => console.log(err))
             }else{
+                confirm("Unequiping this job will delete all your progress. Are you sure you want to continue?")
                 axios.post('/removeUserJob', { job: this.selectedJob.id })
                 .then(res => this.$store.dispatch('setUserDataEquipedJobs', res.data ))
                 .catch(err => console.log(err))
