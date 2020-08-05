@@ -2275,14 +2275,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   /**
@@ -2448,7 +2440,6 @@ __webpack_require__.r(__webpack_exports__);
 
         var selectedJob = this.findEquipedJob();
         this.$store.commit('jobSelected', selectedJob);
-        console.log('i ran');
         /**
          * but if you resolve the issue where refreshing an expanded job causes faded jobCells but still clickable 
          * it would be easier
@@ -2461,7 +2452,6 @@ __webpack_require__.r(__webpack_exports__);
           var _selectedJob = this.findEquipedJob();
 
           this.$store.commit('jobSelected', _selectedJob);
-          console.log('i ran 2');
         }
     },
 
@@ -2863,6 +2853,7 @@ __webpack_require__.r(__webpack_exports__);
       if (this.currentPos === null) {
         /**
          * If getBoundingClientRect() is not yet ran, there will be no position info
+         * return something to prevent "(error during evaluation)" error
          */
         return {};
       } else {
@@ -2993,7 +2984,11 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     var parent = document.getElementById('jobGrid');
-    this.$store.commit('getGridCSS', parent.getBoundingClientRect()); //this.$store.commit('jobSelected', null)
+    this.$store.commit('getGridCSS', parent.getBoundingClientRect());
+    /**
+     * This is used to reset jobSelected, not really needed, only a hack
+     */
+    //this.$store.commit('jobSelected', null)
   }
 });
 
@@ -3111,6 +3106,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
 //
 //
 //
@@ -8347,7 +8343,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.jobChanger[data-v-a7ce4ccc] {\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    padding-left: 7px;\n    padding-right: 7px;\n    height: 60px;\n    width: 0px;\n    background: grey;\n    border-radius: 40px;\n    margin: 0px auto 0px auto;\n    position: relative;\n}\n.jobChanger .jobListCont[data-v-a7ce4ccc] {\n    background: rgb(87, 87, 87);\n    overflow-x: auto;\n    border-radius: 100px;\n    width: 100%;\n    height: 51px;\n    line-height: 50px;\n}\n.jobChanger .AddOrRemoveJobCont[data-v-a7ce4ccc] {\n    height: 43px;\n    width: 100%;\n}\n.addRemoveJobButton[data-v-a7ce4ccc] {\n    width: 100%;\n    line-height: 45px;\n    border-radius: 30px;\n    font-size: 25px;\n    text-align: center;\n}\n.remove[data-v-a7ce4ccc] {\n    background: red;\n    color: white;\n}\n.equip[data-v-a7ce4ccc] {\n    background: green;\n    color: white;\n}\n.addRemoveJobButton[data-v-a7ce4ccc]:active {\n    border: none;\n    outline: none;\n}\n.addRemoveJobButton[data-v-a7ce4ccc]:hover {\n    -webkit-filter: grayscale(50%);\n            filter: grayscale(50%);\n}\n\n/** JobList scrollbar only */\n.jobListCont[data-v-a7ce4ccc]::-webkit-scrollbar {\n    height: 1px;\n}\n.jobListCont[data-v-a7ce4ccc]::-webkit-scrollbar-track {\n    background: transparent;\n}\n.jobListCont[data-v-a7ce4ccc]::-webkit-scrollbar-thumb {\n    background: rgb(71, 71, 71);\n}\n/** JobList scrollbar only */\n.equipRemoveButtonWidth[data-v-a7ce4ccc] {\n    width: 150px;\n}\n.textAndButtonCont[data-v-a7ce4ccc] {\n    position: absolute;\n    right: 6px;\n    top: 17%;\n    display:flex;\n    width: -webkit-max-content;\n    width: -moz-max-content;\n    width: max-content;\n}\n.textAndButtonCont .text[data-v-a7ce4ccc] {\n    margin: auto 5px auto 5px;\n    font-size: 20px;\n}\n.backArrowButton[data-v-a7ce4ccc] {\n    font-size: 40px;\n}\n.plusButton[data-v-a7ce4ccc] {\n    font-size: 38px;\n    height: 40px;\n    width: 40px;\n}\n@media only screen and (min-width: 500px) {\n.zeroJobsEquiped[data-v-a7ce4ccc] {\n        /* background: yellow; */\n        width: 50vw;\n}\n.nonZeroJobsEquiped[data-v-a7ce4ccc] {\n        max-width: 70vw;\n}\n}\n@media only screen and (min-width: 800px) {\n.zeroJobsEquiped[data-v-a7ce4ccc] {\n        /* background: green; */\n        width: 40vw;\n}\n.nonZeroJobsEquiped[data-v-a7ce4ccc] {\n        max-width: 60vw;\n}\n}\n@media only screen and (min-width: 1080px) {\n.zeroJobsEquiped[data-v-a7ce4ccc] {\n        /* background: purple; */\n        width: 30vw;\n}\n.nonZeroJobsEquiped[data-v-a7ce4ccc] {\n        max-width: 50vw;\n}\n}\n@media only screen and (min-width: 1500px) {\n.zeroJobsEquiped[data-v-a7ce4ccc] {\n        background: black;\n        max-width: 10vw;\n}\n.nonZeroJobsEquiped[data-v-a7ce4ccc] {\n        width: -webkit-max-content;\n        width: -moz-max-content;\n        width: max-content;\n        min-width: 15vw;\n        max-width: 40vw;\n}\n}\n.addAJobText[data-v-a7ce4ccc] {\n    font-size: 1.5em;\n}\n.addAJobCont[data-v-a7ce4ccc] {\n    position: relative;\n    top: 20%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    width: 24%;\n    margin-left: 38%;\n    margin-right: 38%;\n}\n.addAJobCont2[data-v-a7ce4ccc] {\n    position: relative;\n    top: 20%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    width: 70%;\n    margin-left: 15%;\n    margin-right: 15%;\n}\n.AddJobCont[data-v-a7ce4ccc] {\n    position: absolute;\n    display: flex;\n    align-items: center;\n    top: 10%;\n    left: 91.5%;\n    width: 5%;\n    width: 40px;\n    height: 40px;\n    border-radius: 50px;\n    z-index: 2;\n}\n", ""]);
+exports.push([module.i, "\n.jobChanger[data-v-a7ce4ccc] {\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    padding-left: 7px;\n    padding-right: 7px;\n    height: 60px;\n    width: 0px;\n    background: grey;\n    border-radius: 40px;\n    margin: 0px auto 0px auto;\n    position: relative;\n}\n.jobChanger .jobListCont[data-v-a7ce4ccc] {\n    background: rgb(87, 87, 87);\n    overflow-x: auto;\n    border-radius: 100px;\n    width: 100%;\n    height: 51px;\n    line-height: 50px;\n}\n.jobChanger .AddOrRemoveJobCont[data-v-a7ce4ccc] {\n    height: 43px;\n    width: 100%;\n}\n.addRemoveJobButton[data-v-a7ce4ccc] {\n    width: 100%;\n    line-height: 45px;\n    border-radius: 30px;\n    font-size: 25px;\n    text-align: center;\n}\n.remove[data-v-a7ce4ccc] {\n    background: red;\n    color: white;\n}\n.equip[data-v-a7ce4ccc] {\n    background: green;\n    color: white;\n}\n.addRemoveJobButton[data-v-a7ce4ccc]:active {\n    border: none;\n    outline: none;\n}\n.addRemoveJobButton[data-v-a7ce4ccc]:hover {\n    -webkit-filter: grayscale(50%);\n            filter: grayscale(50%);\n}\n\n/** JobList scrollbar only */\n.jobListCont[data-v-a7ce4ccc]::-webkit-scrollbar {\n    height: 0px;\n}\n/** JobList scrollbar only */\n.equipRemoveButtonWidth[data-v-a7ce4ccc] {\n    width: 150px;\n}\n.textAndButtonCont[data-v-a7ce4ccc] {\n    position: absolute;\n    right: 6px;\n    top: 17%;\n    display:flex;\n    width: -webkit-max-content;\n    width: -moz-max-content;\n    width: max-content;\n}\n.textAndButtonCont .text[data-v-a7ce4ccc] {\n    margin: auto 5px auto 5px;\n    font-size: 20px;\n}\n.backArrowButton[data-v-a7ce4ccc] {\n    font-size: 40px;\n}\n.plusButton[data-v-a7ce4ccc] {\n    font-size: 38px;\n    height: 40px;\n    width: 40px;\n}\n@media only screen and (min-width: 500px) {\n.zeroJobsEquiped[data-v-a7ce4ccc] {\n        /* background: yellow; */\n        width: 50vw;\n}\n.nonZeroJobsEquiped[data-v-a7ce4ccc] {\n        max-width: 70vw;\n}\n}\n@media only screen and (min-width: 800px) {\n.zeroJobsEquiped[data-v-a7ce4ccc] {\n        /* background: green; */\n        width: 40vw;\n}\n.nonZeroJobsEquiped[data-v-a7ce4ccc] {\n        max-width: 60vw;\n}\n}\n@media only screen and (min-width: 1080px) {\n.zeroJobsEquiped[data-v-a7ce4ccc] {\n        /* background: purple; */\n        width: 30vw;\n}\n.nonZeroJobsEquiped[data-v-a7ce4ccc] {\n        max-width: 50vw;\n}\n}\n@media only screen and (min-width: 1500px) {\n.zeroJobsEquiped[data-v-a7ce4ccc] {\n        background: black;\n        max-width: 10vw;\n}\n.nonZeroJobsEquiped[data-v-a7ce4ccc] {\n        width: -webkit-max-content;\n        width: -moz-max-content;\n        width: max-content;\n        min-width: 15vw;\n        max-width: 40vw;\n}\n}\n.addAJobText[data-v-a7ce4ccc] {\n    font-size: 1.5em;\n}\n.addAJobCont[data-v-a7ce4ccc] {\n    position: relative;\n    top: 20%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    width: 24%;\n    margin-left: 38%;\n    margin-right: 38%;\n}\n.addAJobCont2[data-v-a7ce4ccc] {\n    position: relative;\n    top: 20%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    width: 70%;\n    margin-left: 15%;\n    margin-right: 15%;\n}\n.AddJobCont[data-v-a7ce4ccc] {\n    position: absolute;\n    display: flex;\n    align-items: center;\n    top: 10%;\n    left: 91.5%;\n    width: 5%;\n    width: 40px;\n    height: 40px;\n    border-radius: 50px;\n    z-index: 2;\n}\n", ""]);
 
 // exports
 
@@ -8385,7 +8381,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/**\n *  Collapse mode\n */\n.collapse[data-v-f1bbaa5c] {\n    display: flex;\n    height: 100%;\n    flex-flow: column;\n}\n.jobImage[data-v-f1bbaa5c] {\n    max-width: 100%;\n    max-height: 80%;\n    -o-object-fit: fill;\n       object-fit: fill;\n}\n\n/**\n *  Expanded Mode\n *  Job Details Container\n */\n\n/* Inside Col1 */\n.col1[data-v-f1bbaa5c] {\n    display: flex;\n    height: auto;\n    flex-flow: column nowrap;\n    width: 30%;\n    /* border: solid orangered 5px; */\n}\n.col1 .expandedJobImage[data-v-f1bbaa5c] {\n    -o-object-fit: contain;\n       object-fit: contain;\n}\n.col1 .jobTitleDescCont[data-v-f1bbaa5c] {\n    display: flex;\n    flex-flow: column wrap;\n    height: 560px;\n    /* border: yellowgreen solid 5px; */\n}\n.jobTitleDescCont .jobTitle[data-v-f1bbaa5c] {\n    font-size: 3em;\n    flex: 3;\n\n    padding: 5%;\n    /* border: blue 5px solid; */\n}\n.jobTitleDescCont .jobDesc[data-v-f1bbaa5c] {\n    font-size: 1.5em;\n    flex: 7;\n\n    padding: 5%;\n    word-break: break-all;\n    overflow-y: auto;\n    /* border: green 5px solid; */\n}\n.centerText[data-v-f1bbaa5c] {\n    text-align: justify;\n    text-justify: inter-word;\n}\n/**\n * inside col2\n */\n.col2[data-v-f1bbaa5c] {\n    width: 70%;\n    height: 100%;\n    display: flex;\n    flex-direction: row;\n}\n.statsIconCont[data-v-f1bbaa5c] {\n    width: 100px;\n    height: 100px;\n}\n.statsIcon[data-v-f1bbaa5c] {\n    -o-object-fit: contain;\n       object-fit: contain;\n    width: 100%;\n    height: 100%;\n}\n.jobDetailsCont[data-v-f1bbaa5c] {\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n    height: 100%;\n}\n.text[data-v-f1bbaa5c] {\n    height: 100%;\n}\n.buildCol[data-v-f1bbaa5c] {\n    width: 55%;\n    height: 100%;\n    display: flex;\n    flex-direction: column;\n}\n.statsCol[data-v-f1bbaa5c] {\n    width: 45%;\n    height: 100%;\n    display: flex;\n    flex-direction: column;\n    justify-content: center;\n}\n.statsCol .StatsIconCont[data-v-f1bbaa5c] {\n    height: 15%;\n    display: flex;\n    margin-left: 10%;\n}\n.StatsIconCont>img[data-v-f1bbaa5c] {\n    height: 100%;\n    width: 35%;\n}\n.StatsIconCont .iconStats[data-v-f1bbaa5c] {\n    font-size: 3em;\n    justify-content: center;\n    align-self: center;\n    margin-left: 5%;\n}\n.StatsIconCont .selectCont[data-v-f1bbaa5c] {\n    height: 80%;\n    width: 80%;\n}\n.selectCont[data-v-f1bbaa5c] {\n    font-size: 35px;\n}\n.selectCont option[data-v-f1bbaa5c] {\n    font-size: 35px;\n}\n\n/**\n * default is the initial status of all grid cells \n */\n.default[data-v-f1bbaa5c] {\n    background: rgba(0, 5, 4, 0.8);\n    transition: top .5s, left .5s, width .5s, height .5s, opacity 1s, border .5s;\n    position: relative;\n    opacity: 1.0;\n    left: 0px; \n    top: 0px;\n    width: 100%; \n    height: 100%;\n    z-index: auto; /* don't remove, this prevents faded grid cells from getting clicked at the back of the expanded cell */\n    border: darkslategray 2px solid;\n    box-sizing: border-box;\n}\n\n/* Fade is applied to other grid cells when one of the cells is 'expanded' */\n.fade[data-v-f1bbaa5c] {\n    background: rgba(0, 5, 4, 0.8);\n    opacity: 0.0;\n}\n.expanded[data-v-f1bbaa5c] {\n    background: rgba(0, 5, 4, 0.8);\n    transition: top .5s, left .5s, width .5s, height .5s, opacity 1s, border .5s;\n    position: relative;\n    left: 0px; \n    top: 0px;\n    width: 100%; \n    height: 100%;\n    z-index: auto; /* don't remove, this prevents faded grid cells from getting clicked at the back of the expanded cell */\n    border: darkslategray 4px solid;\n    box-sizing: border-box;\n}\n.fadein-enter-active[data-v-f1bbaa5c] {\n    transition: opacity 0.2s;\n    transition-delay: .5s;\n}\n.fadein-enter[data-v-f1bbaa5c] { \n    opacity: 0;\n}\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/**\n *  Collapse mode\n */\n.collapse[data-v-f1bbaa5c] {\n    display: flex;\n    flex-flow: column;\n    box-sizing: border-box;\n}\n.jobImage[data-v-f1bbaa5c] {\n    max-width: 100%;\n    max-height: 80%;\n    -o-object-fit: fill;\n       object-fit: fill;\n}\n\n/**\n *  Expanded Mode\n *  Job Details Container\n */\n\n/* Inside Col1 */\n.col1[data-v-f1bbaa5c] {\n    display: flex;\n    height: auto;\n    flex-flow: column nowrap;\n    width: 30%;\n    /* border: solid orangered 5px; */\n}\n.col1 .expandedJobImage[data-v-f1bbaa5c] {\n    -o-object-fit: contain;\n       object-fit: contain;\n}\n.col1 .jobTitleDescCont[data-v-f1bbaa5c] {\n    display: flex;\n    flex-flow: column wrap;\n    height: 560px;\n    /* border: yellowgreen solid 5px; */\n}\n.jobTitleDescCont .jobTitle[data-v-f1bbaa5c] {\n    font-size: 3em;\n    flex: 3;\n\n    padding: 5%;\n    /* border: blue 5px solid; */\n}\n.jobTitleDescCont .jobDesc[data-v-f1bbaa5c] {\n    font-size: 1.5em;\n    flex: 7;\n\n    padding: 5%;\n    word-break: break-all;\n    overflow-y: auto;\n    /* border: green 5px solid; */\n}\n.centerText[data-v-f1bbaa5c] {\n    text-align: justify;\n    text-justify: inter-word;\n}\n/**\n * inside col2\n */\n.col2[data-v-f1bbaa5c] {\n    width: 70%;\n    height: 100%;\n    display: flex;\n    flex-direction: row;\n}\n.statsIconCont[data-v-f1bbaa5c] {\n    width: 100px;\n    height: 100px;\n}\n.statsIcon[data-v-f1bbaa5c] {\n    -o-object-fit: contain;\n       object-fit: contain;\n    width: 100%;\n    height: 100%;\n}\n.jobDetailsCont[data-v-f1bbaa5c] {\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n    height: 100%;\n}\n.text[data-v-f1bbaa5c] {\n    height: 100%;\n}\n.buildCol[data-v-f1bbaa5c] {\n    width: 55%;\n    height: 100%;\n    display: flex;\n    flex-direction: column;\n}\n.statsCol[data-v-f1bbaa5c] {\n    width: 45%;\n    height: 100%;\n    display: flex;\n    flex-direction: column;\n    justify-content: center;\n}\n.statsCol .StatsIconCont[data-v-f1bbaa5c] {\n    height: 15%;\n    display: flex;\n    margin-left: 10%;\n}\n.StatsIconCont>img[data-v-f1bbaa5c] {\n    height: 100%;\n    width: 35%;\n}\n.StatsIconCont .iconStats[data-v-f1bbaa5c] {\n    font-size: 3em;\n    justify-content: center;\n    align-self: center;\n    margin-left: 5%;\n}\n.StatsIconCont .selectCont[data-v-f1bbaa5c] {\n    height: 80%;\n    width: 80%;\n}\n.selectCont[data-v-f1bbaa5c] {\n    font-size: 35px;\n}\n.selectCont option[data-v-f1bbaa5c] {\n    font-size: 35px;\n}\n\n/**\n * default is the initial status of all grid cells \n */\n.default[data-v-f1bbaa5c] {\n    background: rgba(0, 5, 4, 0.8);\n    transition: top .5s, left .5s, width .5s, height .5s, opacity 1s, border .5s;\n    position: relative;\n    opacity: 1.0;\n    left: 0px; \n    top: 0px;\n    width: 100%; \n    height: 100%;\n    z-index: auto; /* don't remove, this prevents faded grid cells from getting clicked at the back of the expanded cell */\n    border: darkslategray 2px solid;\n    box-sizing: border-box;\n}\n\n/* Fade is applied to other grid cells when one of the cells is 'expanded' */\n.fade[data-v-f1bbaa5c] {\n    background: rgba(0, 5, 4, 0.8);\n    opacity: 0.0;\n}\n.expanded[data-v-f1bbaa5c] {\n    background: rgba(0, 5, 4, 0.8);\n    transition: top .5s, left .5s, width .5s, height .5s, opacity 1s, border .5s;\n    position: relative;\n    left: 0px; \n    top: 0px;\n    width: 100%; \n    height: 100%;\n    z-index: auto; /* don't remove, this prevents faded grid cells from getting clicked at the back of the expanded cell */\n    border: darkslategray 4px solid;\n    box-sizing: border-box;\n}\n.fadein-enter-active[data-v-f1bbaa5c] {\n    transition: opacity 0.2s;\n    transition-delay: .5s;\n}\n.fadein-enter[data-v-f1bbaa5c] { \n    opacity: 0;\n}\n", ""]);
 
 // exports
 
@@ -8404,7 +8400,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.jobGrid[data-v-5e6eca94] {\n    display: grid;\n    grid-template-columns: 10% 10% 10% 10% 10% 10% 10% ;\n    grid-template-rows: 25% 25% 25% 25% ;\n    grid-column-gap: 5%;\n    grid-row-gap: 3%;\n    overflow: hidden;\n    \n    margin: auto;\n    margin-top: 2%;\n    width: 90%;\n    height: 90%;\n    max-width: 90%;\n    max-height: 90%;\n}\n", ""]);
+exports.push([module.i, "\n.jobGrid[data-v-5e6eca94] {\n    display: grid;\n    grid-template-columns: 10% 10% 10% 10% 10% 10% 10% ;\n    grid-template-rows: 30% 30% 30% 30% 30% ;\n    grid-column-gap: 5%;\n    grid-row-gap: 3%;\n    overflow: hidden;\n    \n    margin: auto;\n    margin-top: 2%;\n    width: 90%;\n    height: 90%;\n    max-width: 90%;\n    max-height: 90%;\n}\n", ""]);
 
 // exports
 
@@ -8461,7 +8457,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\ndiv[data-v-2198c09b] {\n    text-align: center;\n    border: green solid 1px;\n}\n", ""]);
+exports.push([module.i, "\ndiv[data-v-2198c09b] {\n    text-align: center;\n    height: 100%;\n    word-break: keep-all;\n}\n", ""]);
 
 // exports
 
@@ -40987,10 +40983,7 @@ var render = function() {
             [
               _c("img", { staticClass: "jobImage", attrs: { src: _vm.css } }),
               _vm._v(" "),
-              _c("scale-font-size", {
-                staticClass: "jobTitle",
-                attrs: { text: _vm.job.title }
-              })
+              _c("scale-font-size", { attrs: { text: _vm.job.title } })
             ],
             1
           )
@@ -41203,7 +41196,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "jobGrid", attrs: { id: "jobGrid" } },
+    { staticClass: "jobGrid myr", attrs: { id: "jobGrid" } },
     _vm._l(_vm.jobs, function(job, index) {
       return _c("job-cell", { key: job.id, attrs: { job: job, index: index } })
     }),
@@ -41312,11 +41305,9 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "template", style: _vm.myCSS, attrs: { id: "myText" } },
-    [_vm._v("\n    " + _vm._s(_vm.text) + "\n")]
-  )
+  return _c("div", { ref: "x", staticClass: "template myr" }, [
+    _vm._v("\n    " + _vm._s(_vm.text) + "\n")
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true

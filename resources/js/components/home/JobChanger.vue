@@ -90,15 +90,7 @@
 
 /** JobList scrollbar only */
 .jobListCont::-webkit-scrollbar {
-    height: 1px;
-}
-
-.jobListCont::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.jobListCont::-webkit-scrollbar-thumb {
-    background: rgb(71, 71, 71);
+    height: 0px;
 }
 /** JobList scrollbar only */
 

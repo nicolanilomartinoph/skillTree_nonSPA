@@ -1,5 +1,5 @@
 <template>
-    <div class="jobGrid" id="jobGrid" >
+    <div class="jobGrid myr" id="jobGrid" >
         <job-cell v-for="(job, index) in jobs" :key="job.id" :job="job" :index="index"/>
     </div>
 </template>
@@ -8,7 +8,7 @@
 .jobGrid {
     display: grid;
     grid-template-columns: 10% 10% 10% 10% 10% 10% 10% ;
-    grid-template-rows: 25% 25% 25% 25% ;
+    grid-template-rows: 30% 30% 30% 30% 30% ;
     grid-column-gap: 5%;
     grid-row-gap: 3%;
     overflow: hidden;
@@ -41,6 +41,9 @@ export default {
         let parent = document.getElementById('jobGrid')
         this.$store.commit('getGridCSS', parent.getBoundingClientRect())
         
+        /**
+         * This is used to reset jobSelected, not really needed, only a hack
+         */
         //this.$store.commit('jobSelected', null)
     }
 }

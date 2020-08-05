@@ -30,8 +30,7 @@ export default {
          * This method allows user to open a job among its equipedJobs instead of clicking a jobCell from the 
          * jobGrid at the JOB_SELECTOR view
          */
-        viewEquipedJob() { 
-
+        viewEquipedJob() {
             /**
              * If jobEquipedCont is clicked while $store.view.name = HOME
              */
@@ -44,26 +43,18 @@ export default {
                  */
                 let selectedJob = this.findEquipedJob()
                 this.$store.commit('jobSelected', selectedJob)
-                console.log('i ran')
                 /**
                  * but if you resolve the issue where refreshing an expanded job causes faded jobCells but still clickable 
                  * it would be easier
                  */
             }
-
             /**
              * If jobEquipedCont is clicked while $store.view.name = JOB_SELECTOR
              */
             else{
                 let selectedJob = this.findEquipedJob()
                 this.$store.commit('jobSelected', selectedJob)
-                console.log('i ran 2')
-                
             }
-
-            
-
-            
         },
         /**
          * This FN finds and returns the selectedJob Obj among the available jobs

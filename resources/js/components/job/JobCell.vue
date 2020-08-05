@@ -9,7 +9,7 @@
         <!-- collapse -->
         <div v-if="noOneIsExpanding" class="collapse">
             <img class="jobImage" :src="css" />
-            <scale-font-size :text="job.title" class="jobTitle" />
+            <scale-font-size :text="job.title" />
         </div>
 
         <!-- expanded -->
@@ -89,8 +89,8 @@
 
  .collapse {
     display: flex;
-    height: 100%;
     flex-flow: column;
+    box-sizing: border-box;
  }
 
  .jobImage {
@@ -375,6 +375,7 @@ export default {
             if(this.currentPos === null) {
                 /**
                  * If getBoundingClientRect() is not yet ran, there will be no position info
+                 * return something to prevent "(error during evaluation)" error
                  */
                 return {}
             }else{

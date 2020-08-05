@@ -1,5 +1,5 @@
 <template>
-    <div class="template" :style="myCSS" id="myText">
+    <div class="template myr" ref="x">
         {{ text }}
     </div>
 </template>
@@ -7,7 +7,8 @@
 <style scoped>
 div {
     text-align: center;
-    border: green solid 1px;
+    height: 100%;
+    word-break: keep-all;
 }
 </style>
 
