@@ -2762,6 +2762,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['job', 'index'],
   data: function data() {
@@ -2866,7 +2867,7 @@ __webpack_require__.r(__webpack_exports__);
           left: "".concat(this.gridCSS.left - this.currentPos.left, "px"),
           top: "".concat(this.gridCSS.top - this.currentPos.top, "px"),
           width: "1000%",
-          height: "400%",
+          height: "333.5%",
           zIndex: 2 //don't remove, this prevents faded grid cells from getting clicked at the back of the expanded cell
 
         };
@@ -8381,7 +8382,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/**\n *  Collapse mode\n */\n.collapse[data-v-f1bbaa5c] {\n    display: flex;\n    flex-flow: column;\n    box-sizing: border-box;\n}\n.jobImage[data-v-f1bbaa5c] {\n    max-width: 100%;\n    max-height: 80%;\n    -o-object-fit: fill;\n       object-fit: fill;\n}\n\n/**\n *  Expanded Mode\n *  Job Details Container\n */\n\n/* Inside Col1 */\n.col1[data-v-f1bbaa5c] {\n    display: flex;\n    height: auto;\n    flex-flow: column nowrap;\n    width: 30%;\n    /* border: solid orangered 5px; */\n}\n.col1 .expandedJobImage[data-v-f1bbaa5c] {\n    -o-object-fit: contain;\n       object-fit: contain;\n}\n.col1 .jobTitleDescCont[data-v-f1bbaa5c] {\n    display: flex;\n    flex-flow: column wrap;\n    height: 560px;\n    /* border: yellowgreen solid 5px; */\n}\n.jobTitleDescCont .jobTitle[data-v-f1bbaa5c] {\n    font-size: 3em;\n    flex: 3;\n\n    padding: 5%;\n    /* border: blue 5px solid; */\n}\n.jobTitleDescCont .jobDesc[data-v-f1bbaa5c] {\n    font-size: 1.5em;\n    flex: 7;\n\n    padding: 5%;\n    word-break: break-all;\n    overflow-y: auto;\n    /* border: green 5px solid; */\n}\n.centerText[data-v-f1bbaa5c] {\n    text-align: justify;\n    text-justify: inter-word;\n}\n/**\n * inside col2\n */\n.col2[data-v-f1bbaa5c] {\n    width: 70%;\n    height: 100%;\n    display: flex;\n    flex-direction: row;\n}\n.statsIconCont[data-v-f1bbaa5c] {\n    width: 100px;\n    height: 100px;\n}\n.statsIcon[data-v-f1bbaa5c] {\n    -o-object-fit: contain;\n       object-fit: contain;\n    width: 100%;\n    height: 100%;\n}\n.jobDetailsCont[data-v-f1bbaa5c] {\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n    height: 100%;\n}\n.text[data-v-f1bbaa5c] {\n    height: 100%;\n}\n.buildCol[data-v-f1bbaa5c] {\n    width: 55%;\n    height: 100%;\n    display: flex;\n    flex-direction: column;\n}\n.statsCol[data-v-f1bbaa5c] {\n    width: 45%;\n    height: 100%;\n    display: flex;\n    flex-direction: column;\n    justify-content: center;\n}\n.statsCol .StatsIconCont[data-v-f1bbaa5c] {\n    height: 15%;\n    display: flex;\n    margin-left: 10%;\n}\n.StatsIconCont>img[data-v-f1bbaa5c] {\n    height: 100%;\n    width: 35%;\n}\n.StatsIconCont .iconStats[data-v-f1bbaa5c] {\n    font-size: 3em;\n    justify-content: center;\n    align-self: center;\n    margin-left: 5%;\n}\n.StatsIconCont .selectCont[data-v-f1bbaa5c] {\n    height: 80%;\n    width: 80%;\n}\n.selectCont[data-v-f1bbaa5c] {\n    font-size: 35px;\n}\n.selectCont option[data-v-f1bbaa5c] {\n    font-size: 35px;\n}\n\n/**\n * default is the initial status of all grid cells \n */\n.default[data-v-f1bbaa5c] {\n    background: rgba(0, 5, 4, 0.8);\n    transition: top .5s, left .5s, width .5s, height .5s, opacity 1s, border .5s;\n    position: relative;\n    opacity: 1.0;\n    left: 0px; \n    top: 0px;\n    width: 100%; \n    height: 100%;\n    z-index: auto; /* don't remove, this prevents faded grid cells from getting clicked at the back of the expanded cell */\n    border: darkslategray 2px solid;\n    box-sizing: border-box;\n}\n\n/* Fade is applied to other grid cells when one of the cells is 'expanded' */\n.fade[data-v-f1bbaa5c] {\n    background: rgba(0, 5, 4, 0.8);\n    opacity: 0.0;\n}\n.expanded[data-v-f1bbaa5c] {\n    background: rgba(0, 5, 4, 0.8);\n    transition: top .5s, left .5s, width .5s, height .5s, opacity 1s, border .5s;\n    position: relative;\n    left: 0px; \n    top: 0px;\n    width: 100%; \n    height: 100%;\n    z-index: auto; /* don't remove, this prevents faded grid cells from getting clicked at the back of the expanded cell */\n    border: darkslategray 4px solid;\n    box-sizing: border-box;\n}\n.fadein-enter-active[data-v-f1bbaa5c] {\n    transition: opacity 0.2s;\n    transition-delay: .5s;\n}\n.fadein-enter[data-v-f1bbaa5c] { \n    opacity: 0;\n}\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/**\n *  Collapse mode\n */\n.collapse[data-v-f1bbaa5c] {\n    display: flex;\n    flex-flow: column;\n    box-sizing: border-box;\n}\n.jobImage[data-v-f1bbaa5c] {\n    max-width: 100%;\n    max-height: 80%;\n    -o-object-fit: fill;\n       object-fit: fill;\n}\n\n/**\n *  Expanded Mode\n *  Job Details Container\n */\n\n/* Inside Col1 */\n.col1[data-v-f1bbaa5c] {\n    display: flex;\n    height: auto;\n    flex-flow: column nowrap;\n    width: 30%;\n    /* border: solid orangered 5px; */\n}\n.col1 .expandedJobImage[data-v-f1bbaa5c] {\n    -o-object-fit: contain;\n       object-fit: contain;\n}\n.col1 .jobTitleDescCont[data-v-f1bbaa5c] {\n    display: flex;\n    flex-flow: column wrap;\n    height: 560px;\n    /* border: yellowgreen solid 5px; */\n}\n.jobTitleDescCont .jobTitle[data-v-f1bbaa5c] {\n    font-size: 3em;\n    flex: 3;\n\n    padding: 5%;\n    /* border: blue 5px solid; */\n}\n.jobTitleDescCont .jobDesc[data-v-f1bbaa5c] {\n    font-size: 1.5em;\n    flex: 7;\n\n    padding: 5%;\n    word-break: break-all;\n    overflow-y: auto;\n    /* border: green 5px solid; */\n}\n.centerText[data-v-f1bbaa5c] {\n    text-align: justify;\n    text-justify: inter-word;\n}\n/**\n * inside col2\n */\n.col2[data-v-f1bbaa5c] {\n    width: 70%;\n    height: 100%;\n    display: flex;\n    flex-direction: row;\n}\n.statsIconCont[data-v-f1bbaa5c] {\n    width: 100px;\n    height: 100px;\n}\n.statsIcon[data-v-f1bbaa5c] {\n    -o-object-fit: contain;\n       object-fit: contain;\n    width: 100%;\n    height: 100%;\n}\n.jobDetailsCont[data-v-f1bbaa5c] {\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n    height: 100%;\n}\n.text[data-v-f1bbaa5c] {\n    height: 100%;\n}\n.buildCol[data-v-f1bbaa5c] {\n    width: 55%;\n    height: 100%;\n    display: flex;\n    flex-direction: column;\n}\n.statsCol[data-v-f1bbaa5c] {\n    width: 45%;\n    height: 100%;\n    display: flex;\n    flex-direction: column;\n    justify-content: center;\n}\n.statsCol .StatsIconCont[data-v-f1bbaa5c] {\n    height: 15%;\n    display: flex;\n    margin-left: 10%;\n}\n.StatsIconCont>img[data-v-f1bbaa5c] {\n    height: 100%;\n    width: 35%;\n}\n.StatsIconCont .iconStats[data-v-f1bbaa5c] {\n    font-size: 3em;\n    justify-content: center;\n    align-self: center;\n    margin-left: 5%;\n}\n.StatsIconCont .selectCont[data-v-f1bbaa5c] {\n    height: 80%;\n    width: 80%;\n}\n.selectCont[data-v-f1bbaa5c] {\n    font-size: 35px;\n}\n.selectCont option[data-v-f1bbaa5c] {\n    font-size: 35px;\n}\n\n/**\n * default is the initial status of all grid cells \n */\n.default[data-v-f1bbaa5c] {\n    background: rgba(0, 5, 4, 0.8);\n    transition: top .5s, left .5s, width .5s, height .5s, opacity 1s, border .5s;\n    position: relative;\n    opacity: 1.0;\n    left: 0px; \n    top: 0px;\n    right: 0px;\n    bottom: 0px;\n    width: 100%; \n    height: 100%;\n    z-index: auto; /* don't remove, this prevents faded grid cells from getting clicked at the back of the expanded cell */\n    border: darkslategray 2px solid;\n    box-sizing: border-box;\n}\n\n/* Fade is applied to other grid cells when one of the cells is 'expanded' */\n.fade[data-v-f1bbaa5c] {\n    background: rgba(0, 5, 4, 0.8);\n    opacity: 0.0;\n}\n.expanded[data-v-f1bbaa5c] {\n    background: rgba(0, 5, 4, 0.8);\n    transition: top .5s, left .5s, width .5s, height .5s, opacity 1s, border .5s;\n    position: relative;\n    left: 0px; \n    top: 0px;\n    width: 100%; \n    height: 100%;\n    z-index: auto; /* don't remove, this prevents faded grid cells from getting clicked at the back of the expanded cell */\n    border: darkslategray 4px solid;\n    box-sizing: border-box;\n}\n.fadein-enter-active[data-v-f1bbaa5c] {\n    transition: opacity 0.2s;\n    transition-delay: .5s;\n}\n.fadein-enter[data-v-f1bbaa5c] { \n    opacity: 0;\n}\n", ""]);
 
 // exports
 
@@ -41021,69 +41022,6 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "col2" }, [
                 _c("div", { staticClass: "statsCol" }, [
-                  _c(
-                    "div",
-                    {
-                      staticClass: "StatsIconCont",
-                      on: {
-                        click: function($event) {
-                          $event.stopPropagation()
-                        }
-                      }
-                    },
-                    [
-                      _c(
-                        "select",
-                        {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.selectedBuild,
-                              expression: "selectedBuild"
-                            }
-                          ],
-                          staticClass: "selectCont",
-                          attrs: { name: "", id: "" },
-                          on: {
-                            change: function($event) {
-                              var $$selectedVal = Array.prototype.filter
-                                .call($event.target.options, function(o) {
-                                  return o.selected
-                                })
-                                .map(function(o) {
-                                  var val = "_value" in o ? o._value : o.value
-                                  return val
-                                })
-                              _vm.selectedBuild = $event.target.multiple
-                                ? $$selectedVal
-                                : $$selectedVal[0]
-                            }
-                          }
-                        },
-                        _vm._l(_vm.builds, function(build) {
-                          return _c(
-                            "option",
-                            {
-                              key: _vm.job.id + "-" + build.id,
-                              domProps: { value: build }
-                            },
-                            [
-                              _vm._v(
-                                "\n                                " +
-                                  _vm._s(build.title) +
-                                  " - " +
-                                  _vm._s(build.author) +
-                                  "\n                            "
-                              )
-                            ]
-                          )
-                        }),
-                        0
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
                   _c("div", { staticClass: "statsIconCont myr" }, [
                     _c("img", {
                       staticClass: "statsIcon",
@@ -41162,7 +41100,70 @@ var render = function() {
                     _c("div", { staticClass: "buildHeader" }, [
                       _c("div", [_vm._v("comments")])
                     ])
-                  ])
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "StatsIconCont",
+                      on: {
+                        click: function($event) {
+                          $event.stopPropagation()
+                        }
+                      }
+                    },
+                    [
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.selectedBuild,
+                              expression: "selectedBuild"
+                            }
+                          ],
+                          staticClass: "selectCont",
+                          attrs: { name: "", id: "" },
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.selectedBuild = $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            }
+                          }
+                        },
+                        _vm._l(_vm.builds, function(build) {
+                          return _c(
+                            "option",
+                            {
+                              key: _vm.job.id + "-" + build.id,
+                              domProps: { value: build }
+                            },
+                            [
+                              _vm._v(
+                                "\n                                " +
+                                  _vm._s(build.title) +
+                                  " - " +
+                                  _vm._s(build.author) +
+                                  "\n                            "
+                              )
+                            ]
+                          )
+                        }),
+                        0
+                      )
+                    ]
+                  )
                 ])
               ])
             ])
@@ -41196,7 +41197,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "jobGrid myr", attrs: { id: "jobGrid" } },
+    { staticClass: "jobGrid", attrs: { id: "jobGrid" } },
     _vm._l(_vm.jobs, function(job, index) {
       return _c("job-cell", { key: job.id, attrs: { job: job, index: index } })
     }),

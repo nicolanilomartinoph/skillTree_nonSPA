@@ -1,5 +1,5 @@
 <template>
-    <div class="jobGrid myr" id="jobGrid" >
+    <div class="jobGrid" id="jobGrid" >
         <job-cell v-for="(job, index) in jobs" :key="job.id" :job="job" :index="index"/>
     </div>
 </template>

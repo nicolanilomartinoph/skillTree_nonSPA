@@ -28,15 +28,6 @@
                 </div>
                 <div class="col2">
                     <div class="statsCol">
-                        <!-- build selector -->
-                        <div class="StatsIconCont" @click.stop="">
-                            <select name="" id="" class="selectCont" v-model="selectedBuild">
-                                <option v-for="build in builds" :key="job.id + '-' + build.id" :value="build">
-                                    {{ build.title }} - {{ build.author}}
-                                </option>
-                            </select>
-                        </div>
-
                         <!-- icon -> nTime required to finish the job -->
                         <!-- icon -> nSkills to study (clicking leads to skillTree) --> 
                         <!-- icon -> nSubjects (clicking leads to skillTree) -->
@@ -74,6 +65,14 @@
                             <div class="buildHeader">
                                 <div>comments</div>
                             </div>
+                        </div>
+                        <!-- build selector -->
+                        <div class="StatsIconCont" @click.stop="">
+                            <select name="" id="" class="selectCont" v-model="selectedBuild">
+                                <option v-for="build in builds" :key="job.id + '-' + build.id" :value="build">
+                                    {{ build.title }} - {{ build.author}}
+                                </option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -239,6 +238,8 @@
     opacity: 1.0;
     left: 0px; 
     top: 0px;
+    right: 0px;
+    bottom: 0px;
     width: 100%; 
     height: 100%;
     z-index: auto; /* don't remove, this prevents faded grid cells from getting clicked at the back of the expanded cell */
@@ -388,7 +389,7 @@ export default {
                     left: `${this.gridCSS.left - this.currentPos.left}px`,
                     top: `${this.gridCSS.top - this.currentPos.top}px`,
                     width: `1000%`,
-                    height: `400%`,
+                    height: `333.5%`,
                     zIndex: 2, //don't remove, this prevents faded grid cells from getting clicked at the back of the expanded cell
                 }
             }
