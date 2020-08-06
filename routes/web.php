@@ -26,3 +26,6 @@ Route::get('/jobs', function() {
 });
 Route::get('/jobs/{job}', 'JobsController@show');
 Route::get('/jobs/{job}/subject', 'SubjectController@show');
+
+Route::post('/addUserJob', 'UserJobController@create')->middleware('auth');
+Route::post('/removeUserJob', 'UserJobController@destroy')->middleware('auth');

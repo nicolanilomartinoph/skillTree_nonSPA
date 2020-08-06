@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Arr;
+use Auth;
 
 class JobsController extends Controller
 {
@@ -19,7 +20,10 @@ class JobsController extends Controller
      */
     public function index()
     {
-        //
+        // This displays the available jobs
+        $jobs = DB::table('jobs')->select('id','title', 'description')->get();
+
+        return json_encode($jobs);
     }
 
     /**

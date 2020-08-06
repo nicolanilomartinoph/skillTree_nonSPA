@@ -11,7 +11,7 @@
         "image" : "app/public/skillTree/images/jobs/web_development_icon.jpg",
         "aux": [16,17,18,22]
     },
-    "Artificial Intelligence | Machine Learning Engineer" : {
+    "Machine Learning Engineer" : {
         "base" : [1,2,3],
         "description": "Artificial intelligence is the goal of a machine learning engineer. They are computer programmers, but their focus goes beyond specifically programming machines to perform specific tasks. They create programs that will enable machines to take actions without being specifically directed to perform those tasks. An example of a system a machine learning engineer would work on is a self-driving car. There are a number of applications for the work that machine learning engineers do. They may program services so that they can try to identify a specific person's interests or needs. From customized news feeds to tailored web searches, machine learning engineers are contributing to the daily lives of many individuals and how they use technology.",
         "image" : "app/public/skillTree/images/jobs/web_development_icon.jpg",

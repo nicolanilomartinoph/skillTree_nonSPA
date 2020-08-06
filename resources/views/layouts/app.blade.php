@@ -25,7 +25,7 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/dev.css') }}" rel="stylesheet">
 </head>
-<body>
+<body >
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light shadow-sm">
             <div class="container">

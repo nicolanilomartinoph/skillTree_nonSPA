@@ -46,9 +46,7 @@ class SkillsSeeder extends Seeder
         $skills = json_decode(file_get_contents(storage_path("app/public/skillTree/data/skills.json")));
 
         /**
-         * 
          * EXECUTE SEEDING
-         * 
          */
         foreach($skills as $key => $skill)
         {

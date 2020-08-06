@@ -1,19 +1,15 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import state from './state'
+import mutations from './mutations'
+import actions from './actions'
 import createPersistedState from 'vuex-persistedstate';
 
 Vue.use(Vuex)
 
 export const store = new Vuex.Store({
-    state: {
-        skillView: true,
-        skill: null
-    },
+    state,
     plugins: [createPersistedState()],
-    mutations: {
-        skillSubjectToggler(state, n) {
-            if(n) state.skill = n
-            state.skillView = !state.skillView 
-        }
-    }
+    mutations,
+    actions
 })
